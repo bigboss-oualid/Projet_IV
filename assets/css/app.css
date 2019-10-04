@@ -1,0 +1,33 @@
+/**
+ *Bootsrap changes:
+ *.bg-dark => background-color: #c92d02 ...
+ *--primary: #007bff;
+ *--warning: #ffc107;
+ *--dark: #343a40;
+ */
+@import "~bootstrap/dist/css/bootstrap";
+
+/*center logo navbar*/
+.center-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.container .dropdown .dropdown-menu a:hover
+ {
+     color: #fff;
+     background-color: #c92d02;
+     border-color: #fff;
+ }
+.container .dropdown .dropdown-menu
+{
+    background-color: #c92d02;
+}
+
+.container .dropdown .dropdown-menu .dropdown-item
+{
+    color: rgba(255, 255, 255, 0.5);
+}
+
+
