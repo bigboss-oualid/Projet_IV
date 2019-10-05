@@ -12,4 +12,9 @@ require('../css/app.css');
  const $ = require('jquery');
 require('bootstrap');
 
+/* home-page display infos about tarifs */
+$('span').ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');

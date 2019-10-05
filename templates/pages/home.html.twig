@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Informations billetterie Louvre' %}
+{% block header %}
+    <header>
+        <div class="home-overlay-image">
+                <img class="home-image mt-4" src="{{ asset('images/monna-lisa.jpg') }}" alt="monna-lisa" />
+                <div class="home-normal float-sm-left">
+                    <div class="row home-text"><span class="col-sm-4 text-center">Bienvenue sur le site de vente en ligne du Louvre</span></div>
+                </div>
+                <div class="home-hover">
+                    <a href="#" class="float-sm-left">
+                        <div class="row home-text p-4"><span class="ml-4 col-sm-3 btn btn-outline-warning">ACHETEZ VOTRE BILLET</span></div>
+                    </a>
+                </div>
+        </div>
+    </header>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="jumbotron jumbotron-fluid">
+            <h1 class="text-center">INFORMATIONS PRATIQUES</h1>
+            <div class="container mt-4">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Ouverture</a>
+                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Type de billets</a>
+                        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Tarifs</a>
+                    </div>
+                </nav>
+                <div class="tab-content bg-light" id="nav-tabContent">
+                    <div class="p-4 tab-pane text-justify fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        Le musée du Louvre est ouvert tous les jours, sauf les mardis et fermé les 1er mai, 1er novembre et 25 décembre, de 9h à 18h, jusqu'à 21h45 les mercredis et vendredis, à l’exception des jours fériés. La fermeture des salles débute à 17h30 et à 21h30 les mercredis et vendredis.
+                    </div>
+                    <div class="p-4 tab-pane text-justify fade ml-4 mr-4" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <span class="badge badge-success">le billet « Journée » </span>
+                        <p><span class="badge badge-warning">le billet « Demi-journée »</span> <span class="small">il ne permet de rentrer qu’à partir de 14h00.</span></p>
+                    </div>
+                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge badge-secondary">Tarif Normal </span>
+                                <span class="respo-text">à partir de 12 ans</span>
+                                <span class="badge badge-secondary badge-pill float-right">16 €</span>
+                            </li>
+                            <li class="list-group-item ">
+                                <span class="badge badge-primary" data-toggle="tooltip" data-placement="right" title="Gratuit pour les enfants de moins de 4 ans">Tarif Enfant </span>
+                                <span class="respo-text">à partir de 4 ans et jusqu’à 12 ans</span>
+                                <span class="badge badge-primary badge-pill float-right">8 €</span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge badge-warning">Tarif Senior </span> <span class="respo-text">à partir de 60 ans</span>
+                                <span class="badge badge-warning badge-pill float-right">12 €</span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge badge-success"  data-toggle="tooltip" data-placement="right" title="Tarif accordé sous certaines conditions (étudiant, employé du musée, service du Ministère de la Culture, militaire…) ">Tarif Réduit </span>
+                                <span class="badge badge-success badge-pill float-right">10 €</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="text-center">Le billet acheté en ligne est nominatif. Un document d’identité peut vous être demandé à votre arrivée. </p>
+    </div>
+
+{% endblock %}

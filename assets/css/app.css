@@ -13,7 +13,7 @@
     left: 50%;
     transform: translateX(-50%);
 }
-
+/*Adapt menu languages to navbar */
 .container .dropdown .dropdown-menu a:hover
  {
      color: #fff;
@@ -24,10 +24,68 @@
 {
     background-color: #c92d02;
 }
-
 .container .dropdown .dropdown-menu .dropdown-item
 {
     color: rgba(255, 255, 255, 0.5);
 }
 
+
+
+
+body {
+    color: #2c2c2c;
+    font-size: 20px;
+    font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+}
+.jumbotron
+ {
+    margin: 20px;
+    color: #533;
+    background-color: #9bb
+}
+
+/********* Hover image & text *******/
+/* Overlay */
+.home-overlay-image .home-hover {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+}
+/* display overlay on mouse hover */
+.home-overlay-image:hover .home-hover {
+    opacity: 1;
+}
+
+.home-overlay-image:hover .home-normal {
+    opacity: 0;
+}
+.home-overlay-image .home-hover {
+    background-color: rgba(0,0,0,0.40);
+}
+
+/* Image originale */
+.home-overlay-image .home-image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+/* Texte original */
+.home-overlay-image .home-text {
+    color: #38c0d7;
+    font-size: 2vw;
+    line-height: 1.5em;
+    text-shadow: 2px 2px 2px #000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+
+.respo-text {
+    font-size: 1vw;
+}
 
