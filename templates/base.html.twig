@@ -27,7 +27,7 @@
                         <a class="nav-link font-weight-bold {% if current_menu is defined and current_menu == 'home' %} active {% endif %}" href="{{ path('home') }}">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link font-weight-bold {% if current_menu is defined and current_menu == 'contact' %} active {% endif %}" href="#">Contact</a>
+                        <a class="nav-link font-weight-bold {% if current_menu is defined and current_menu == 'contact' %} active {% endif %}" href="{{ path('contact') }}">Contact</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -49,10 +49,11 @@
         </div>
     </nav>
 {# EndNavbar #}
-{% block header %}{% endblock %}
-    <section>
-        {% block body %}{% endblock %}
-    </section>
+    {% block header %}{% endblock %}
+
+    {% block body %}{% endblock %}
+
+    <!-- Footer -->
     <footer>
         {# fix Webpack error page-auto-loading #}
         {{ encore_entry_script_tags('app') }}

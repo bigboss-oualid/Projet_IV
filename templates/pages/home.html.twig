@@ -2,24 +2,25 @@
 
 {% block title 'Informations billetterie Louvre' %}
 {% block header %}
-    <header>
+    <header class="mb-5">
         <div class="home-overlay-image">
                 <img class="home-image mt-4" src="{{ asset('images/monna-lisa.jpg') }}" alt="monna-lisa" />
                 <div class="home-normal float-sm-left">
-                    <div class="row home-text"><span class="col-sm-4 text-center">Bienvenue sur le site de vente en ligne du Louvre</span></div>
+                    <div class="row home-text"><span class="font-weight-bold col-sm-4 text-center">Bienvenue sur le site de vente en ligne du Louvre</span></div>
                 </div>
                 <div class="home-hover">
                     <a href="#" class="float-sm-left">
-                        <div class="row home-text p-4"><span class="ml-4 col-sm-3 btn btn-outline-warning">ACHETEZ VOTRE BILLET</span></div>
+                        <div class="row display-3 home-text p-4"><span class="ml-4 col-sm-3 btn btn-outline-warning font-weight-bold">ACHETEZ VOTRE BILLET</span></div>
                     </a>
                 </div>
         </div>
     </header>
 {% endblock %}
 {% block body %}
-    <div class="container">
-        <div class="jumbotron jumbotron-fluid">
-            <h1 class="text-center">INFORMATIONS PRATIQUES</h1>
+    <section class="mb-4">
+        <div class="container">
+        <div class="jumbotron">
+            <h1 class="text-center font-weight-bold">INFORMATIONS PRATIQUES</h1>
             <div class="container mt-4">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -63,5 +64,5 @@
         </div>
         <p class="text-center">Le billet acheté en ligne est nominatif. Un document d’identité peut vous être demandé à votre arrivée. </p>
     </div>
-
+    </section>
 {% endblock %}

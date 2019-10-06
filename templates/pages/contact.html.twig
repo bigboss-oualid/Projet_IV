@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Informations billetterie Louvre' %}
+{% block header %}
+    <header>
+        <div class="jumbotron jumbotron-fluid width-max mt-5">
+            <h1 class="h1-responsive font-weight-bold text-center my-4">Contact</h1>
+            <p class="text-center w-responsive mx-auto mb-5">N'hésitez pas à nous contacter, nous serons ravis de répondre à vos questions</p>
+        </div>
+    </header>
+{% endblock %}
+{% block body %}
+    <!--Section: Contact v.2-->
+    <section class="mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-md-0 mb-5">
+                    {# Flash message #}
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                    {% if not form.vars.valid %}
+                        <div class="alert alert-danger">
+                            Tous les champs sont obligatoires, veuillez corriger les erreurs.
+                        </div>
+                    {% endif %}
+                    {# endFlash message #}
+                    {{ form_start(form) }}
+                    <p class="text-center">Pour une prise de contact rapide, envoyez-nous le formulaire après l'avoir rempli.</p><hr class="text-center "/>
+                    <div class="row">
+                        <div class="col-md-6">{{ form_row(form.lastname) }}</div>
+                        <div class="col-md-6">{{ form_row(form.firstname) }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">{{ form_row(form.email) }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-5">{{ form_row(form.subject) }}</div>
+                    </div>
+                    {{ form_rest(form) }}
+                    <div class="form-group">
+                        <button class="btn btn-outline-success btn-block font-weight-bold">Envoyer</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Section: Contact v.2-->
+{% endblock %}

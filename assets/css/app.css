@@ -87,12 +87,24 @@ body {
 }
 .jumbotron
 {
-    margin: 20px;
-    color: #c92d02;
-    background-color: #9bb
+    color: #533;
+    background-color: #9bb;
+}
+
+.jumbotron h1
+{
+    color: #e57112;
+    text-shadow: 0.5px 0.5px 0.5px #000000;
 }
 
 .respo-text {
     font-size: 1vw;
+}
+
+hr {
+    margin: 0rem 10rem 2rem 10rem;
+    margin-top: -0.5rem;
+    border: 3px solid rgba(46, 54, 60, 1);
+    border-radius: 5px;
 }
 
