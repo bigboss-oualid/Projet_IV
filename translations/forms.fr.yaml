@@ -3,8 +3,15 @@ Firstname: Prénom
 Email: Adresse de messagerie
 Subject: Sujet
 Message: Message
-Visitors: Nombre de visiteurs
+Visitors nbr: Nombre de visiteurs
 Full day: Type de Billet
 Reserved for: Date de la visite
-day: Toute la journée
-half day: Demi-journée
+Day: Toute la journée
+Half day: Demi-journée
+Not allowed days: C’est pas possible de réserver pour les jours passés, les mardis, les dimanches, et les jours fériés
+Visitor: Visiteur
+Country: pays
+Choose your Country: Choisissez votre pays
+Birthday: Date de naissance
+Discount: Tarif réduit
+Reduction rule: C'est nécessaire de présenter sa carte d’étudiant, militaire ou équivalent lors  de l’entrée pour vous bénéficie du tarif réduit!

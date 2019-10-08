@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,9 +13,9 @@ class Booking
 {
 
 	const TYPE_TICKET= [
-		'day'      => 1,
-		'half day' => 0,
-	];
+                     		'day'      => 1,
+                     		'half day' => 0,
+                     	];
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -26,10 +28,6 @@ class Booking
      */
     private $client;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $visitors = [];
 
 	/**
 	 * @ORM\Column(type="integer")
@@ -56,16 +54,26 @@ class Booking
      */
     private $totalPrice;
 
+	/**
+	 * @var Visitor|null
+	 */
+    private $visitor;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="App\Entity\Visitor", mappedBy="booking", orphanRemoval=true, cascade={"persist"})
+	 */
+	private $visitors;
 
     public function __construct()
     {
     	$this->setCreatedAt(new \DateTime());
+        $this->visitors = new ArrayCollection();
     }
 
 	public function getId(): ?int
-    {
-        return $this->id;
-    }
+	{
+	     return $this->id;
+	}
 
     public function getClient()
     {
@@ -79,29 +87,17 @@ class Booking
         return $this;
     }
 
-    public function getVisitors(): ?array
-    {
-        return $this->visitors;
-    }
-
-    public function setVisitors(array $visitors): self
-    {
-        $this->visitors = $visitors;
-
-        return $this;
-    }
-
 
 	public function getVisitorsNbr()
-	{
-		return $this->visitorsNbr;
-	}
+    {
+        return $this->visitorsNbr;
+    }
 
 	public function setVisitorsNbr($visitorsNbr)
-	{
-		$this->visitorsNbr = $visitorsNbr;
-		return $this;
-	}
+    {
+        $this->visitorsNbr = $visitorsNbr;
+        return $this;
+    }
 
     public function getReservedFor(): ?\DateTimeInterface
     {
@@ -152,6 +148,56 @@ class Booking
     public function setTotalPrice(int $totalPrice): self
     {
         $this->totalPrice = $totalPrice;
+
+        return $this;
+    }
+
+	/**
+	 * @return Collection|Visitors[]
+	 */
+	public function getVisitors(): Collection
+	{
+		return $this->visitors;
+	}
+
+	/**
+	 * @return Visitor|null
+	 */
+	public function getVisitor(): ?Visitor
+	{
+		return $this->visitor;
+	}
+
+	/**
+	 * @param Visitor|null $visitor
+	 *
+	 * @return Booking
+	 */
+	public function setVisitor(?Visitor $visitor): self
+	{
+		$this->visitor = $visitor;
+		return $this;
+	}
+
+	public function addVisitor(Visitor $visitor): self
+    {
+        if (!$this->visitors->contains($visitor)) {
+            $this->visitors[] = $visitor;
+            $visitor->setBooking($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVisitor(Visitor $visitor): self
+    {
+        if ($this->visitors->contains($visitor)) {
+            $this->visitors->removeElement($visitor);
+            // set the owning side to null (unless already changed)
+            if ($visitor->getBooking() === $this) {
+                $visitor->setBooking(null);
+            }
+        }
 
         return $this;
     }

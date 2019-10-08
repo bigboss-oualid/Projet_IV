@@ -20,14 +20,13 @@ class BookingController extends AbstractController
     public function index(Request $request): Response
     {
     	$form = $this->createForm(OrderType::class);
-	    dump($form);
-    	$form->handleRequest($request);
+	    $form->handleRequest($request);
 
-	    //if($form->isSubmitted() && $form->isValid()) {
+	    dump($form);//die();
+	    if($form->isSubmitted() && $form->isValid()) {
 
-
-		    return new Response('Genug für Heute, Morgen wieder!!!!');
-	    //}
+		    return new Response('Endlich geschaft :) Go to BookingController & uncomment die() [line 25] to show the function dump()!!!!');
+	    }
 
 
         return $this->render('pages/booking/order.html.twig', [

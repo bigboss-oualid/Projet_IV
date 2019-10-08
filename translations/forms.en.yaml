@@ -1,2 +1,13 @@
 Lastname: Last name
 Firstname: First name
+visitors nbr: Number of visitors
+Full day: Type of Ticket
+#Reserved for:
+day: All day
+#half day: Demi-journée
+Not allowed days: CIt is not possible to book for past days, Tuesdays, Sundays, and holidays
+Visitor: Visitor
+#Country:
+#birthday:
+Discount: Reduced price
+Reduction rule: It is necessary to present your student card, military or equivalent at the entrance to benefit from the reduced price

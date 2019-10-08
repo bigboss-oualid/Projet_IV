@@ -39,9 +39,10 @@
                 <div class="col-md-4">
                     {{ form_start(form) }}
                     <div class="row">
-                        <div class="col-sm-12">{{ form_row(form.visitors) }}</div>
+                        <div class="col-sm-12">{{ form_row(form.visitorsNbr) }}</div>
                         <div class="col-sm-12">{{ form_row(form.fullDay) }}</div>
                         <div class="col-md-12">{{ form_row(form.reservedFor) }}</div>
+                        {{ form_rest(form) }}
                         <div class="col-md-12">
                             <div class="form-group">
                                 <button class="btn btn-outline-success btn-block font-weight-bold">Envoyer</button>
