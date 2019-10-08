@@ -23,11 +23,14 @@
             </button>
             <div class="collapse navbar-collapse " id="navbarNav">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link font-weight-bold {% if current_menu is defined and current_menu == 'home' %} active {% endif %}" href="{{ path('home') }}">Accueil</a>
+                    <li class="nav-item">
+                        <a class="nav-link font-weight-bold {% if current_menu is defined and current_menu == 'Home' %} active {% endif %}" href="{{ path('home') }}">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link font-weight-bold {% if current_menu is defined and current_menu == 'contact' %} active {% endif %}" href="{{ path('contact') }}">Contact</a>
+                        <a class="nav-link font-weight-bold {% if current_menu is defined and current_menu == 'Ticket' %} active {% endif %}" href="{{ path('booking') }}">Billet</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link font-weight-bold {% if current_menu is defined and current_menu == 'Contact' %} active {% endif %}" href="{{ path('contact') }}">Contact</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">

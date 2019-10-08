@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Réservation des billets' %}
+{% block header %}
+    <header class="na-buy">
+            <div class="col-lg-11 section-progress">
+                <div class="container ">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="text-success">Détails sur la commande
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+    </header>
+{% endblock %}
+{% block body %}
+    <!--Section: Contact-->
+    <section class="mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-md-0 mb-5">
+                    {# Flash message #}
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    {% if not form.vars.valid %}
+                        <div class="alert alert-danger">
+                            Veuillez corriger les erreurs avant de passer à l'étape suivant.
+                        </div>
+                    {% endif %}
+                    {# endFlash message #}
+                </div>
+            </div>
+            <div class="row h-100 justify-content-center">
+                <div class="col-md-4">
+                    {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col-sm-12">{{ form_row(form.visitors) }}</div>
+                        <div class="col-sm-12">{{ form_row(form.fullDay) }}</div>
+                        <div class="col-md-12">{{ form_row(form.reservedFor) }}</div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button class="btn btn-outline-success btn-block font-weight-bold">Envoyer</button>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Section: Contact-->
+{% endblock %}

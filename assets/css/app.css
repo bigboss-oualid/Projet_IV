@@ -102,9 +102,24 @@ body {
 }
 
 hr {
-    margin: 0rem 10rem 2rem 10rem;
     margin-top: -0.5rem;
-    border: 3px solid rgba(46, 54, 60, 1);
+    border: 1.5px solid rgba(46, 54, 60, 1);
     border-radius: 5px;
 }
 
+.smaller {
+    font-size: 0.8rem;
+    text-shadow: 0.5px 0.5px 0.5px #FFFFFF;
+}
+
+/*Add Asterisk(*) before label*/
+label.required:before {
+    content: "*  ";
+    color: red;
+    font-style: oblique;
+    font-weight: bolder;
+}
+
+.na-buy {
+    margin-top: 8rem;
+}

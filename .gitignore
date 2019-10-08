@@ -27,3 +27,7 @@
 /assets/images/
 npm-debug.log
 ###< symfony/webpack-encore-bundle ###
+
+###> Database migrations ###
+/src/Migrations/
+###< Database migrations ###

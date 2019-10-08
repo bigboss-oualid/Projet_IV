@@ -41,6 +41,13 @@ class Contact
 	private $message;
 
 	/**
+	 * @var boolean|null
+	 * @Assert\NotBlank()
+	 * @Assert\Type("boolean")
+	 */
+	private $accept;
+
+	/**
 	 * @return null|string
 	 */
 	public function getFirstname(): ?string
@@ -132,6 +139,25 @@ class Contact
 	public function setMessage(?string $message): Contact
 	{
 		$this->message = $message;
+		return $this;
+	}
+
+	/**
+	 * @return bool|null
+	 */
+	public function isAccept(): ?bool
+	{
+		return $this->accept;
+	}
+
+	/**
+	 * @param bool $accept
+	 *
+	 * @return Contact
+	 */
+	public function setAccept(bool $accept): Contact
+	{
+		$this->accept = $accept;
 		return $this;
 	}
 }
