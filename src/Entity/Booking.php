@@ -13,9 +13,9 @@ class Booking
 {
 
 	const TYPE_TICKET= [
-                     		'day'      => 1,
-                     		'half day' => 0,
-                     	];
+        'Day'      => 1,
+        'Half day' => 0,
+	];
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

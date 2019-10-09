@@ -17,10 +17,13 @@ class OrderType extends AbstractType
     {
         $builder
             ->add('visitorsNbr', ChoiceType::class, [
-	            'choices' => $this->getVisitorChoices()
+	            'choices' => $this->getVisitorChoices(),
+
+		            'placeholder' => 'Choose number of Visitor ?'
+
             ])
 	        ->add('fullDay', ChoiceType::class, [
-		        'choices' => Booking::TYPE_TICKET
+		        'choices' => Booking::TYPE_TICKET,
 	        ])
             ->add('reservedFor', DateType::class, [
 	            'widget' => 'single_text',
@@ -33,7 +36,6 @@ class OrderType extends AbstractType
 		                'label' => false
 	                    ]
 	            )
-
 	        )
         ;
     }
@@ -54,13 +56,8 @@ class OrderType extends AbstractType
 	 * @return int[]
 	 */
 	private function getVisitorChoices(int $start = 1, int $end = 10) :array
-    {
-    	$range = range($start, $end);
-    	$choices = [];
-
-    	foreach($range as $k => $v){
-    		$choices[$v] = $k;
-        }
-        return $choices;
-    }
+	{
+		$range = range($start, $end);
+		return array_combine($range, $range);
+	}
 }
