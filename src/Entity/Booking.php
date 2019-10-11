@@ -24,9 +24,9 @@ class Booking
     private $id;
 
     /**
-     * @ORM\Column(type="object")
+     * @ORM\Column(type="string", length=255)
      */
-    private $client;
+    private $clientEmail;
 
 
 	/**
@@ -64,7 +64,10 @@ class Booking
 	 */
 	private $visitors;
 
-    public function __construct()
+	/**
+	 * Booking constructor.
+	 */
+	public function __construct()
     {
     	$this->setCreatedAt(new \DateTime());
         $this->visitors = new ArrayCollection();
@@ -75,23 +78,22 @@ class Booking
 	     return $this->id;
 	}
 
-    public function getClient()
-    {
-        return $this->client;
-    }
-
-    public function setClient($client): self
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
-
 	public function getVisitorsNbr()
     {
         return $this->visitorsNbr;
     }
+
+	public function getClientEmail() :string
+	{
+		return $this->clientEmail;
+	}
+
+	public function setClientEmail($clientEmail) :string
+	{
+		$this->clientEmail = $clientEmail;
+		return $this;
+	}
+
 
 	public function setVisitorsNbr($visitorsNbr)
     {
@@ -153,7 +155,7 @@ class Booking
     }
 
 	/**
-	 * @return Collection|Visitors[]
+	 * @return Collection|Visitor[]
 	 */
 	public function getVisitors(): Collection
 	{

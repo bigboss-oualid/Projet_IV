@@ -52,7 +52,7 @@ class Visitor
     private $ticketAmount;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Booking", inversedBy="visitor")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Booking", inversedBy="visitors")
      * @ORM\JoinColumn(nullable=false)
      */
     private $booking;
@@ -87,33 +87,33 @@ class Visitor
     }
 
 	public function getCountry(): ?string
-             {
-                 return $this->country;
-             }
+	{
+	     return $this->country;
+	}
 
 	public function setCountry(string $country): self
-             {
-                 $this->country = $country;
-         
-                 return $this;
-             }
+    {
+         $this->country = $country;
+
+         return $this;
+    }
 
 	public function getBirthday(): ?\DateTimeInterface
-         	{
-         		return $this->birthday;
-         	}
+	{
+        return $this->birthday;
+    }
 
 	public function setBirthday(\DateTimeInterface $birthday): self
-         	{
-         		$this->birthday = $birthday;
-         
-         		return $this;
-         	}
+    {
+        $this->birthday = $birthday;
+
+        return $this;
+    }
 
 	public function getDiscount(): ?bool
-             {
-                 return $this->discount;
-             }
+	{
+		return $this->discount;
+	}
 
     public function setDiscount(bool $discount): self
     {
