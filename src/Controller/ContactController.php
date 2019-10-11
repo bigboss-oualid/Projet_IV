@@ -23,7 +23,7 @@ class ContactController extends AbstractController
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
 	 */
-	public function index(Request $request, ContactNotification $notification): Response
+	public function contact(Request $request, ContactNotification $notification): Response
 	{
 		$contact = new Contact();
 		$form = $this->createForm(ContactType::class, $contact);

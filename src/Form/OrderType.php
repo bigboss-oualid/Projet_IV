@@ -3,11 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Booking;
-use App\Entity\Visitor;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -19,7 +18,7 @@ class OrderType extends AbstractType
             ->add('visitorsNbr', ChoiceType::class, [
 	            'choices' => $this->getVisitorChoices(),
 
-		            'placeholder' => 'Choose number of Visitor ?'
+		            'placeholder' => 'Choose number of visitors ?'
 
             ])
 	        ->add('fullDay', ChoiceType::class, [
@@ -28,15 +27,15 @@ class OrderType extends AbstractType
             ->add('reservedFor', DateType::class, [
 	            'widget' => 'single_text',
 	            'input'  => 'datetime_immutable',
-	            'days' => range(1,20),
 	            'help' => 'Not allowed days'
-            ])->add($builder->create(
-            	'visitor', VisitorType::class, [
-            	        'by_reference' => true,
-		                'label' => false
-	                    ]
-	            )
-	        )
+            ])
+
+	        ->add('visitors', CollectionType::class, [
+		        'label' => false,
+		        'entry_type' => VisitorType::class,
+		        'allow_add' => true,
+		        'allow_delete' => true,
+	        ])
         ;
     }
 

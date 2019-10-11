@@ -3,13 +3,14 @@ Firstname: Prénom
 Email: Adresse de messagerie
 Subject: Sujet
 Message: Message
-Visitors nbr: Visiteurs
-Choose number of tickets ?: Choisissez le nombre de billets ?
+Visitors nbr: Nombre de Billets
+Choose number of visitors ?: Choisissez le nombre de visiteurs ?
 Full day: Type de Billet
 Reserved for: Date de la visite
 Day: Toute la journée
 Half day: Demi-journée
 Not allowed days: C’est pas possible de réserver pour les jours passés, les mardis, les dimanches, et les jours fériés
+Add Tickets: Ajouter des billets
 Visitor: Visiteur
 Country: pays
 Choose your Country: Choisissez votre pays

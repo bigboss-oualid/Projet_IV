@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Réservation des billets' %}
+{% block header %}
+    <header class="na-buy">
+        <div class="col-lg-11 section-progress">
+            <div class="container ">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="text-success">Détails sur les visiteurs
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+{% block body %}
+    <!--Section: Tickets-->
+    <section class="mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-md-0 mb-5">
+                    {# Flash message #}
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    {% if not form.vars.valid %}
+                        <div class="alert alert-danger">
+                            Veuillez corriger les erreurs avant de passer à l'étape suivant.
+                        </div>
+                    {% endif %}
+                    {# endFlash message #}
+                </div>
+            </div>
+            <div class="row h-100 justify-content-center">
+                <div class="row">
+                    <div class="col-md-4 offset-md-4">
+                    {{ form_start(form) }}
+                        {{ form_row(form.visitors)}}
+                    {{ form_rest(form) }}
+                    <button id="submit-tickets" class="btn btn-success">Ajouter les billets</button>
+                    {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Section: Tickets-->
+{% endblock %}
+
+{% block javascripts %}
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function() {
+            // get CollectionType form
+            let $container = $('div#order_visitors');
+            let ticketNbr = Number('{{ visitorsNbr }}');
+
+            let errors = '{{ form.vars.errors.form.getErrors(true) }}';
+            let i;
+            for (i = 0; i < ticketNbr; i++)
+            {
+                if(errors === '')
+                {
+                    addVisitorForm($container);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            function addVisitorForm($container) {
+                //  Replace value of <legend> & modify input's attributes (id,name) in « data-prototype » in order to generate different fields with different name and ID
+                let template = $container.attr('data-prototype')
+                    .replace(/__name__label__/g, 'Billet n°' + (i+1))
+                    .replace(/__name__/g,        i)
+                ;
+                let $prototype = $(template);
+
+                $container.append($prototype);
+                //$container.append('<hr>');
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title 'Réservation des billets' %}
+
 {% block header %}
     <header class="na-buy">
             <div class="col-lg-11 section-progress">
@@ -16,7 +17,7 @@
     </header>
 {% endblock %}
 {% block body %}
-    <!--Section: Contact-->
+    <!--Section: Booking-->
     <section class="mt-4">
         <div class="container">
             <div class="row">
@@ -42,17 +43,13 @@
                         <div class="col-sm-12">{{ form_row(form.visitorsNbr) }}</div>
                         <div class="col-sm-12">{{ form_row(form.fullDay) }}</div>
                         <div class="col-md-12">{{ form_row(form.reservedFor) }}</div>
-                        {{ form_rest(form) }}
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <button class="btn btn-outline-success btn-block font-weight-bold">Envoyer</button>
-                            </div>
-                        </div>
                     </div>
+                    <button class="btn btn-success">Ajouter les billets</button>
                     {{ form_end(form) }}
                 </div>
             </div>
         </div>
     </section>
-    <!--Section: Contact-->
+    <!--Section: Booking-->
+
 {% endblock %}
