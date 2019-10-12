@@ -56,7 +56,7 @@
 
     <script>
         $(document).ready(function() {
-            // get CollectionType form
+            //Get CollectionType form
             let $container = $('div#order_visitors');
             let ticketNbr = Number('{{ visitorsNbr }}');
 
@@ -74,7 +74,7 @@
                 }
             }
             function addVisitorForm($container) {
-                //  Replace value of <legend> & modify input's attributes (id,name) in « data-prototype » in order to generate different fields with different name and ID
+                //Replace value of <legend> & modify input's attributes (id,name) in « data-prototype » in order to generate different fields with different name and ID
                 let template = $container.attr('data-prototype')
                     .replace(/__name__label__/g, 'Billet n°' + (i+1))
                     .replace(/__name__/g,        i)

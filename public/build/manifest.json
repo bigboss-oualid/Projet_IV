@@ -17,5 +17,6 @@
   "build/images/louvre-logo-2.png": "http://localhost:8080/build/images/louvre-logo-2.png",
   "build/images/louvre-logo.png": "http://localhost:8080/build/images/louvre-logo.png",
   "build/images/louvre.jpeg": "http://localhost:8080/build/images/louvre.jpeg",
-  "build/images/louvre2.jpeg": "http://localhost:8080/build/images/louvre2.jpeg"
+  "build/images/louvre2.jpeg": "http://localhost:8080/build/images/louvre2.jpeg",
+  "build/images/Logo-origi.png": "http://localhost:8080/build/images/Logo-origi.png"
 }

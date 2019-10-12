@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Panier' %}
+
+{% block header %}
+    <header class="na-buy">
+        <div class="col-lg-11 section-progress">
+            <div class="container ">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="text-success">Confirmation</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+{% block body %}
+    <!--Section: Booking-->
+    <section class="mt-4">
+        <div class="container">
+            <div class="h-100 justify-content-center">
+                <div class="bg-light p-3">
+                    <h1>Votre panier</h1>
+                </div>
+                {% if commmands | length > 0 %}
+                    <table class="table">
+                        <caption class="text-center">Commande</caption>
+                        <thead><!-- En-tête du tableau -->
+                        <tr>
+                            <th class="text-center">Commande</th>
+                            <th>Visiteurs</th>
+                            <th>Réduction</th>
+                            <th>Prix/ticket</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tfoot> <!-- Pied de tableau -->
+                        <tr>
+                            <th>Total</th>
+                            <td class="text-center">La somme Total</td>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for command in commmands %}
+                                {% for visitor in command.visitors %}
+                                    <th class="align-middle" rowspan="2">N°{{ loop.index }} pour: {{ command.reservedFor|date('Y-m-d')  }}
+                                    </th>
+                                    {% for visitor in command.visitors %}
+
+                                        {{visitor.lastname}}
+
+                                        {{visitor.discount| default('Non')}}
+
+                                        {{visitor.ticketAmount | default(20)}}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>Votre Panier est vide</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    <!--Section: Booking-->
+
+{% endblock %}
