@@ -55,7 +55,7 @@ class BookingController extends AbstractController
 		    $session->set('cart', $cart);
 
 		    $this->addFlash('success', 'Veuillez entrer les détails pour vos billets');
-			return $this->redirectToRoute('visitors', ['sessionBid' => 0]);
+			return $this->redirectToRoute('visitors');
 	    }
         return $this->render('pages/booking/order.html.twig', [
 	        'current_menu'  => 'Booking',
@@ -85,10 +85,9 @@ class BookingController extends AbstractController
 
 	    if($form->isSubmitted() && $form->isValid()) {
 		    $this->addFlash('success', 'Veuillez entrer les détails pour vos billets');
-			//add the new Booking values -WITH DATA'S VISITORS-
-		    $cart[0] = $form->getData();
+			//copy visitors Values in session
 		    $session->set('cart', $cart);
-		    //dd( $session->get('cart', []));
+		    $cart[0]->addVisitors($form->getData()->getVisitors());
 
 		    return $this->redirectToRoute('cart');
 	    }
@@ -111,7 +110,7 @@ class BookingController extends AbstractController
 
 	    return $this->render('pages/booking/cart.html.twig', [
 		    'current_menu'  => 'Booking/visitors/cart',
-		    'commmands'  => $cart
+		    'orders'  => $cart
 	    ]);
     }
 }

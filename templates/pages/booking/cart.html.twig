@@ -20,40 +20,72 @@
     <section class="mt-4">
         <div class="container">
             <div class="h-100 justify-content-center">
-                <div class="bg-light p-3">
-                    <h1>Votre panier</h1>
+                <div class="row bg-light p-3">
+                    <h1 class="col-sm-8">Votre panier</h1>
+                    <span class="col-sm-4 mt-2">
+                        <a class="float-right btn btn-success btn-sm"><span class=" d-sm-none d-md-inline-block mr-2 font-weight-bold">Nouveaux Billets </span><i class="icon-cog-success fas fa-plus"></i></a>
+                    </span>
                 </div>
-                {% if commmands | length > 0 %}
-                    <table class="table">
-                        <caption class="text-center">Commande</caption>
-                        <thead><!-- En-tête du tableau -->
+                <div >
+                {% if orders | length > 0 %}
+                    <table class="table table-striped-default">
+                        <caption class="text-right">
+                            <a href="#" class="btn btn-info btn-lg my-anima">
+                                <i class="fas fa-credit-card mr-1 my-anima"></i>
+                                <i class="fas fa-angle-double-right mr-5 my-anima"></i>Payer
+                            </a>
+                        </caption>
+
+                        <thead class="thead-dark title-cell"><!-- En-tête du tableau -->
                         <tr>
-                            <th class="text-center">Commande</th>
-                            <th>Visiteurs</th>
-                            <th>Réduction</th>
-                            <th>Prix/ticket</th>
-                            <th>Total</th>
+                            <th class="text-left title-cell">#</th>
+                            <th class="text-left title-cell">Infos</th>
+                            <th class="text-center title-cell"><i class="fas fa-trash-alt"></i></th>
+                            <th class="text-center title-cell">Visiteurs</th>
+                            <th class="text-center title-cell">Réduction</th>
+                            <th class="text-center title-cell">Prix</th>
+                            <th class="text-right title-cell">Total <i class="fas fa-500px fa-euro-sign"></i></th>
                         </tr>
                         </thead>
-                        <tfoot> <!-- Pied de tableau -->
-                        <tr>
-                            <th>Total</th>
-                            <td class="text-center">La somme Total</td>
-                        </tr>
+                        <tfoot>
+                            <tr>
+                                <td  colspan="6"><h4>La somme à payer</h4></td>
+                                <td class="text-right font-weight-bolder"><h4>1000 <i class="fas fa-500px fa-euro-sign"></i></h4></td>
+                            </tr>
                         </tfoot>
                         <tbody>
-                            {% for command in commmands %}
-                                {% for visitor in command.visitors %}
-                                    <th class="align-middle" rowspan="2">N°{{ loop.index }} pour: {{ command.reservedFor|date('Y-m-d')  }}
-                                    </th>
-                                    {% for visitor in command.visitors %}
+                            {% for order in orders %}
+                                {% for visitor in order.visitors %}
+                                    <tr>
+                                    {% if loop.index == 1 %}
+                                        <td rowspan=" {{ order.visitorsNbr }} "  class="col-sm-1 align-middle icon-cog-info font-weight-bolder">N°{{ loop.index }}</td>
 
-                                        {{visitor.lastname}}
-
-                                        {{visitor.discount| default('Non')}}
-
-                                        {{visitor.ticketAmount | default(20)}}
-                                    {% endfor %}
+                                        <td rowspan=" {{ order.visitorsNbr }} "  class="col-sm-2 align-middle"><i class="fas fa-calendar-day icon-cog-info  mr-3"></i><span class="smaller">{{ order.reservedFor|date('d/m/Y') }}</span><br/>
+                                            {% if order.fullDay == false  %}
+                                                <i class="fas fa-history icon-cog-info"></i>
+                                                <i class="fas fa-battery-full icon-cog-info float-right"></i>
+                                            {% else %}
+                                                <i class="fas fa-history icon-cog-info mr-2 mt-1"></i> <span class="smaller"><span class="d-sm-none">à partir de</span>  14H</span>
+                                            {% endif %}</td>
+                                    {% endif %}
+                                    <td class="col-sm-1 striped-cell bl">
+                                        <a href="#" class="ml-4 mr-4 btn btn-outline-danger btn-sm"><i class="fas fa-minus-circle"></i></a>
+                                    </td>
+                                    <td class="col-sm-4 text-center striped-cell">
+                                        <span>{{visitor.lastname ~' '~ visitor.firstname}}</span>
+                                    </td>
+                                    <td class="text-center col-sm-1 striped-cell">
+                                        {{visitor.discount ? '<i class="icon-cog-success fas fa-check"></i>' : '<i class="icon-cog-danger fas fa-times"></i>'}}
+                                    </td>
+                                    <td class="text-center col-sm-1 striped-cell">
+                                        {{visitor.ticketAmount | default(20 )}}
+                                        <i class="fas fa-sm fa-euro-sign"></i>
+                                    </td>
+                                        {% if loop.index == 1 %}
+                                            <td class="col-sm-2 text-right align-bottom font-weight-lighter" rowspan=" {{ order.visitorsNbr }}">112 <i class="fas fa-sm fa-euro-sign"></i>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
                                 {% endfor %}
                             {% endfor %}
                         </tbody>
@@ -61,9 +93,22 @@
                 {% else %}
                     <p>Votre Panier est vide</p>
                 {% endif %}
+                </div>
             </div>
         </div>
     </section>
     <!--Section: Booking-->
 
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        let toggledElt  = document.querySelector(".my-anima");
+
+        function startanimation() {
+                toggledElt.classList.toggle("icon-cog-success");
+        }
+        setInterval(startanimation, 1000);
+    </script>
 {% endblock %}

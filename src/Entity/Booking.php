@@ -163,6 +163,17 @@ class Booking
 	}
 
 	/**
+	 * @param  Collection|Visitor[]
+	 *
+	 * @return Collection
+	 */
+	public function addVisitors(ArrayCollection  $visitors): Collection
+	{
+		$this->visitors = clone $visitors;
+		return $this->visitors;
+	}
+
+	/**
 	 * @return Visitor|null
 	 */
 	public function getVisitor(): ?Visitor

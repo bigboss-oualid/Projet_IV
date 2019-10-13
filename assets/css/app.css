@@ -6,6 +6,7 @@
  *--dark: #343a40;
  */
 @import "~bootstrap/dist/css/bootstrap";
+@import "../../node_modules/@fortawesome/fontawesome-free/css/all";
 
 /*center logo navbar*/
 .center-logo {
@@ -91,10 +92,16 @@ body {
     background-color: #9bb;
 }
 
-.jumbotron h1
+.jumbotron h1, h1, h4
 {
     color: #e57112;
     text-shadow: 0.5px 0.5px 0.5px #000000;
+}
+.title-cell
+{
+    color: #38c0d7 !important ;
+    text-shadow: 0.5px 0.5px 0.5px darkblue !important;
+
 }
 
 .respo-text {
@@ -122,4 +129,24 @@ label.required:before {
 
 .na-buy {
     margin-top: 8rem;
+}
+
+/*fa icon Bootsrap color change*/
+.icon-cog-success {
+    color: lawngreen;
+}
+.icon-cog-danger {
+    color: red;
+}
+.icon-cog-info {
+    color: #38c0d7;
+}
+/*Table cart*/
+.table-striped-default tbody tr:nth-of-type(2n) .striped-cell
+{
+    background: ghostwhite !important;
+}
+tbody tr > div .default-rows:hover
+{
+    background: darkred !important;
 }
