@@ -57,6 +57,14 @@ class Visitor
      */
     private $booking;
 
+	/**
+	 * Visitor constructor.
+	 */
+	public function __construct()
+	{
+		$this->ticketAmount = 10;
+	}
+
     public function getId(): ?int
     {
         return $this->id;

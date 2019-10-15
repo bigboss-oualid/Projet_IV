@@ -4,14 +4,8 @@
 
 {% block header %}
     <header class="na-buy">
-        <div class="col-lg-11 section-progress">
-            <div class="container ">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="text-success">Confirmation</li>
-                    </ol>
-                </nav>
-            </div>
+        <div class="container">
+            <h1 class="col-sm-12 text-center">Votre panier {{ all_visitors }}</h1>
         </div>
     </header>
 {% endblock %}
@@ -19,13 +13,27 @@
     <!--Section: Booking-->
     <section class="mt-4">
         <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-md-0 mb-5">
+                    {# Flash message #}
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    {# endFlash message #}
+                </div>
+            </div>
             <div class="h-100 justify-content-center">
                 <div class="row bg-light p-3">
-                    <h1 class="col-sm-8">Votre panier</h1>
-                    <span class="col-sm-4 mt-2">
-                        <a class="float-right btn btn-success btn-sm"><span class=" d-sm-none d-md-inline-block mr-2 font-weight-bold">Nouveaux Billets </span><i class="icon-cog-success fas fa-plus"></i></a>
+                    <span class="col-sm-6 mt-2">
+                        <a href="{{ path('booking') }}" class="float-right btn btn-success btn-sm"><span class="d-md-inline-block mr-2 font-weight-bold">Ajouter Billets </span><i class="icon-cog-gold fas fa-cart-plus"></i></a>
+                    </span>
+                    <span class="col-sm-6 mt-2">
+                        <a href="{{ path('cleancart') }}" class="float-left btn btn-info btn-sm"><span class="d-md-inline-block mr-2 font-weight-bold">Vider Le panier</span><i class="icon-cog-gold fas fa-broom"></i></a>
                     </span>
                 </div>
+
                 <div >
                 {% if orders | length > 0 %}
                     <table class="table table-striped-default">
@@ -37,53 +45,69 @@
                         </caption>
 
                         <thead class="thead-dark title-cell"><!-- En-tête du tableau -->
-                        <tr>
-                            <th class="text-left title-cell">#</th>
-                            <th class="text-left title-cell">Infos</th>
-                            <th class="text-center title-cell"><i class="fas fa-trash-alt"></i></th>
-                            <th class="text-center title-cell">Visiteurs</th>
-                            <th class="text-center title-cell">Réduction</th>
-                            <th class="text-center title-cell">Prix</th>
-                            <th class="text-right title-cell">Total <i class="fas fa-500px fa-euro-sign"></i></th>
-                        </tr>
+                            <tr>
+                                <th class="col-sm-1 text-left title-cell">#</th>
+                                <th class="col-sm-2 text-left title-cell">Infos</th>
+                                <th class="col-sm-4 text-center title-cell">Visiteurs</th>
+                                <th class="col-sm-1 text-center title-cell">Réduction</th>
+                                <th class="col-sm-1 text-center title-cell">Prix</th>
+                                <th class="col-sm-1 text-center title-cell">
+                                    <i class="fas fa-trash-alt"></i>
+                                </th>
+                                <th class="col-sm-2 text-right title-cell">Total
+                                    <i class="fas fa-500px fa-euro-sign"></i>
+                                </th>
+                            </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <td  colspan="6"><h4>La somme à payer</h4></td>
-                                <td class="text-right font-weight-bolder"><h4>1000 <i class="fas fa-500px fa-euro-sign"></i></h4></td>
+                                <td  colspan="6"><h4 class="text-right">La somme à payer :</h4></td>
+                                <td class="text-right font-weight-bolder"><h4>{{last_price}} <i class="fas fa-500px fa-euro-sign"></i></h4></td>
                             </tr>
                         </tfoot>
-                        <tbody>
+                        <tbody>{{ dump(orders)  }}
                             {% for order in orders %}
+                                {% set orderIndex = loop.index %}
                                 {% for visitor in order.visitors %}
                                     <tr>
                                     {% if loop.index == 1 %}
-                                        <td rowspan=" {{ order.visitorsNbr }} "  class="col-sm-1 align-middle icon-cog-info font-weight-bolder">N°{{ loop.index }}</td>
+                                        <td rowspan=" {{ order.visitorsNbr }} "  class="col-sm-1 align-middle icon-cog-info font-weight-bold">
+                                            <span class="mr-sm-4 ml-sm-n1 float-left">{{ orderIndex }}</span>
+                                            <a href="{{ path('remove', { 'idBooking': orderIndex, 'idVisitor': 0 }) }}" class="mt-1 mr-lg-3 ml-sm-n5 float-right btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash float-left"></i>
+                                            </a>
+                                        </td>
 
-                                        <td rowspan=" {{ order.visitorsNbr }} "  class="col-sm-2 align-middle"><i class="fas fa-calendar-day icon-cog-info  mr-3"></i><span class="smaller">{{ order.reservedFor|date('d/m/Y') }}</span><br/>
+                                        <td rowspan=" {{ order.visitorsNbr }} "  class="col-sm-2 align-middle">
+                                            <i class="fas fa-calendar-day icon-cog-info  mr-2"></i><span class="smaller">{{ order.reservedFor|date('d/m/Y') }}</span><br/>
+                                            <i class="fas fa-history icon-cog-info"></i>
                                             {% if order.fullDay == false  %}
-                                                <i class="fas fa-history icon-cog-info"></i>
-                                                <i class="fas fa-battery-full icon-cog-info float-right"></i>
+                                                <span class="smaller"><span class="d-none d-lg-inline">Toute la</span>  Journée</span>
                                             {% else %}
-                                                <i class="fas fa-history icon-cog-info mr-2 mt-1"></i> <span class="smaller"><span class="d-sm-none">à partir de</span>  14H</span>
-                                            {% endif %}</td>
+                                                <span class="smaller"><span class="d-none d-lg-inline">à partir de</span>  14H</span>
+                                            {% endif %}
+                                        </td>
                                     {% endif %}
-                                    <td class="col-sm-1 striped-cell bl">
-                                        <a href="#" class="ml-4 mr-4 btn btn-outline-danger btn-sm"><i class="fas fa-minus-circle"></i></a>
-                                    </td>
-                                    <td class="col-sm-4 text-center striped-cell">
-                                        <span>{{visitor.lastname ~' '~ visitor.firstname}}</span>
-                                    </td>
-                                    <td class="text-center col-sm-1 striped-cell">
-                                        {{visitor.discount ? '<i class="icon-cog-success fas fa-check"></i>' : '<i class="icon-cog-danger fas fa-times"></i>'}}
-                                    </td>
-                                    <td class="text-center col-sm-1 striped-cell">
-                                        {{visitor.ticketAmount | default(20 )}}
-                                        <i class="fas fa-sm fa-euro-sign"></i>
-                                    </td>
+                                        <td class="col-sm-4 text-center striped-cell">
+                                            <span>{{visitor.lastname ~' '~ visitor.firstname}}</span>
+                                        </td>
+                                        <td class="text-center col-sm-1 striped-cell">
+                                            {{visitor.discount ? '<i class="icon-cog-success fas fa-check"></i>' : '<i class="icon-cog-danger fas fa-times"></i>'}}
+                                        </td>
+                                        <td class="text-center col-sm-1 striped-cell">
+                                            {{visitor.ticketAmount }}
+                                            <i class="fas fa-sm fa-euro-sign"></i>
+                                        </td>
+                                        <td class="col-sm-1 striped-cell text-center">
+                                            <a href="{{ path('remove', { 'idBooking': orderIndex, 'idVisitor': loop.index }) }}" class="btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
                                         {% if loop.index == 1 %}
-                                            <td class="col-sm-2 text-right align-bottom font-weight-lighter" rowspan=" {{ order.visitorsNbr }}">112 <i class="fas fa-sm fa-euro-sign"></i>
-                                            </td>
+                                        <td class="col-sm-2 text-right align-bottom font-weight-lighter" rowspan=" {{ order.visitorsNbr }}">
+                                            {{order.getFormattedPrice}}
+                                            <i class="fas fa-sm fa-euro-sign"></i>
+                                        </td>
                                         {% endif %}
                                     </tr>
                                 {% endfor %}
@@ -106,9 +130,14 @@
     <script>
         let toggledElt  = document.querySelector(".my-anima");
 
-        function startanimation() {
+        function startAnimation() {
                 toggledElt.classList.toggle("icon-cog-success");
         }
-        setInterval(startanimation, 1000);
+        setInterval(startAnimation, 1000);
+
+        let tdElts =document.querySelectorAll('table > tbody > tr > td');
+        for (const tdElt of tdElts){
+            tdElt.classList.add('color-Bottom');
+        }
     </script>
 {% endblock %}

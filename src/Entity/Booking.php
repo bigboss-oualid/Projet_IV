@@ -78,11 +78,6 @@ class Booking
 	     return $this->id;
 	}
 
-	public function getVisitorsNbr()
-    {
-        return $this->visitorsNbr;
-    }
-
 	public function getClientEmail() :string
 	{
 		return $this->clientEmail;
@@ -92,6 +87,11 @@ class Booking
 	{
 		$this->clientEmail = $clientEmail;
 		return $this;
+	}
+
+	public function getVisitorsNbr()
+	{
+		return $this->visitorsNbr;
 	}
 
 
@@ -147,9 +147,13 @@ class Booking
     	return number_format($this->totalPrice, 0, '', ' ');
     }
 
-    public function setTotalPrice(int $totalPrice): self
+    public function setTotalPrice(): self
     {
-        $this->totalPrice = $totalPrice;
+	    $this->totalPrice = 0;
+    	foreach($this->visitors as $visitor ){
+		    $this->totalPrice += $visitor->getTicketAmount();
+	    }
+
 
         return $this;
     }
@@ -165,7 +169,7 @@ class Booking
 	/**
 	 * @param  Collection|Visitor[]
 	 *
-	 * @return Collection
+	 * @return Collection|Visitor[]
 	 */
 	public function addVisitors(ArrayCollection  $visitors): Collection
 	{

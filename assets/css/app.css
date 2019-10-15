@@ -141,12 +141,13 @@ label.required:before {
 .icon-cog-info {
     color: #38c0d7;
 }
+.icon-cog-gold {
+    color: #ffea00 !important;
+}
 /*Table cart*/
-.table-striped-default tbody tr:nth-of-type(2n) .striped-cell
-{
+.table-striped-default tbody tr:nth-of-type(2n) .striped-cell {
     background: ghostwhite !important;
 }
-tbody tr > div .default-rows:hover
-{
-    background: darkred !important;
+table > tbody > tr > td .color-Bottom {
+    border-bottom: 1px solid red !important;
 }
