@@ -4,52 +4,32 @@ namespace App\Controller;
 
 
 use App\Form\OrderType;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Service\Cart\CartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 
 class BookingController extends AbstractController
 {
 	/**
-	 * @var SessionInterface
-	 */
-	private $session;
-
-	/**
-	 * BookingController constructor.
-	 *
-	 * @param SessionInterface $session
-	 */
-	public function __construct(SessionInterface $session)
-	{
-		$this->session = $session;
-	}
-
-	/**
 	 * @Route("/booking", name="booking")
-	 * @param Request $request
+	 * @param Request     $request
+	 *
+	 * @param CartService $cartService
 	 *
 	 * @return Response
 	 */
-    public function booking(Request $request): Response
+    public function booking(Request $request, CartService $cartService): Response
     {
 	    $form = $this->createForm(OrderType::class);
 	    $form->remove('visitors');
 	    $form->handleRequest($request);
 
 	    if($form->isSubmitted() && $form->isValid()) {
-		    $session = $this->session;
-
-		    $cart = $session->get('cart', []);
-		    array_push($cart ,$form->getData());
-		    $session->set('cart', $cart);
-
+	    	$cartService->addOrder($form->getData());
 		    $this->addFlash('success', 'Veuillez entrer les détails pour vos billets');
 
 			return $this->redirectToRoute('visitors');
@@ -57,35 +37,30 @@ class BookingController extends AbstractController
         return $this->render('pages/booking/order.html.twig', [
 	        'current_menu'  => 'Booking',
 	        'form'          => $form->createView(),
-	        'cart'          => $this->fullCart()
+	        'cart'          => $cartService->fullCart()
         ]);
     }
 
 	/**
 	 * @Route("booking/visitors", name="visitors")
-	 * @param Request $request
+	 * @param Request     $request
+	 *
+	 * @param CartService $cartService
 	 *
 	 * @return Response
 	 */
-	public function visitors(Request $request): Response
+	public function visitors(Request $request, CartService $cartService): Response
     {
-	    $session = $this->session;
-	    $cart = $session->get('cart',[]);
-
-	    //Get Number of visitors
-	    $visitorsNbr = end($cart)->getVisitorsNbr();
-
 	    $form = $this->createForm(OrderType::class);
 	    $form->remove('visitorsNbr')
 	         ->remove('fullDay')
 	         ->remove('reservedFor');
+
 	    $form->handleRequest($request);
 
 	    if($form->isSubmitted() && $form->isValid()) {
-			//copy visitors Values in session
 
-		    $this->saveTickets($form, $cart);
-		    $session->set('cart', $cart);
+		   $cartService->saveTickets($form->getData());
 
 		    return $this->redirectToRoute('cart');
 	    }
@@ -93,79 +68,51 @@ class BookingController extends AbstractController
 	    return $this->render('pages/booking/visitors.html.twig', [
 		    'current_menu'  => 'Booking',
 		    'form'          => $form->createView(),
-		    'visitorsNbr'   => $visitorsNbr,
-		    'cart'          => $this->fullCart()
+		    'visitorsNbr'   => $cartService->getLastOrder()->getVisitorsNbr(),
+		    'cart'          => $cartService->fullCart()
 	    ]);
     }
 
 	/**
 	 * @Route("booking/cart", name="cart")
 	 *
+	 * @param CartService $cartService
+	 *
 	 * @return Response
 	 */
-    public function cart(): Response
+    public function cart(CartService $cartService): Response
     {
-    	$cart = $this->session->get('cart', []);
-		dump($cart);
-		$lastPrice = 0;
-	    $this->removeEmptyOrder($cart);
-    	foreach($cart as $key => $booking){
-		    $booking->setTotalPrice();
-		    $lastPrice += $booking->getTotalPrice();
-	    }
-
-	    $allVisitors = $this->countTickets($cart);
-	    $this->session->set('cart', $cart);
+	    $cartInfo = $cartService->getCartInfo();
 
 	    return $this->render('pages/booking/cart.html.twig', [
 		    'current_menu'  => 'Booking',
-		    'orders'        => $cart,
-		    'last_price'    => $lastPrice,
-		    'all_visitors'  => $allVisitors,
-		    'cart'          => $this->fullCart()
+		    'orders'        => $cartInfo['cart'],
+		    'last_price'    => $cartInfo['last_price'],
+		    'total_visitor_nbr'  => $cartInfo['total_visitor_nbr'],
+		    'cart'          => $cartService->fullCart()
 	    ]);
     }
 
 	/**
-	 * @Route("booking/remove/{idBooking}/{idVisitor}",
+	 * @Route("booking/remove/{idOrder}/{idVisitor}",
 	 *      name="remove")
-	 * @param int $idBooking
-	 * @param int $idVisitor
+	 * @param int         $idOrder
+	 * @param int         $idVisitor
+	 *
+	 * @param CartService $cartService
 	 *
 	 * @return RedirectResponse
 	 */
-    public function remove(int $idBooking, int $idVisitor=null): RedirectResponse
+    public function remove(int $idOrder, int $idVisitor=null, CartService $cartService): RedirectResponse
     {
-	    $cart = $this->session->get('cart', []);
-	    $order = &$cart[$idBooking - 1];
-	    if($idVisitor == null){
-		    unset($cart[$idBooking-1]);
-		    $cart = array_values($cart);
-		    $this->addFlash('success', 'Le bouquet des billets n° ' .$idBooking. 'est supprimé avec succès');
-	    }
-	    else{
-			if(!empty($order)){
-			    $order->getVisitors()->remove($idVisitor - 1);
-			    if (!$order->getVisitors()->isEmpty()) {
-				    $items = new ArrayCollection();
-				    $countVisitors = 0;
-				    foreach ($order->getVisitors() as $item) {
-					    $items->add($item);
-					    $countVisitors++;
-				    }
-
-				    $order->addVisitors($items);
-				    $order->setVisitorsNbr($countVisitors);
-			    }else{
-				    unset($cart[$idBooking-1]);
-				    $cart = array_values($cart);
-			    }
-		    }
-		    $this->addFlash('success', 'Le billet n° '. $idVisitor .' est supprimé avec succès');
-	    }
-
-	    $this->session->set('cart', $cart);
-
+		if($idVisitor == null){
+			$cartService->deleteOrder($idOrder);
+			$this->addFlash('success', 'Le bouquet des billets n° ' .$idOrder. 'est supprimé avec succès');
+		}
+        else{
+			$cartService->deleteTicket($idOrder, $idVisitor);
+		    $this->addFlash('success', 'Le billet n° '. $idVisitor .' du bouquet '. $idOrder .' est supprimé avec succès');
+        }
 
 	    return $this->redirectToRoute('cart');
     }
@@ -173,55 +120,18 @@ class BookingController extends AbstractController
 	/**
 	 * @Route("booking/cart/cc",
 	 *      name="cleancart")
+	 * @param CartService $cartService
+	 *
 	 * @return RedirectResponse
 	 */
-	public function CleanCart(): RedirectResponse
+	public function CleanCart(CartService $cartService): RedirectResponse
 	{
-		$this->session->remove('cart');
-
+		$cartService->clean();
 		return $this->redirectToRoute('cart');
 	}
 
-	private function fullCart() {
-    	if(empty($this->session->get('cart'))){
-    		return null;
-	    }
-	    return 'full';
-    }
-
-	/**
-	 * *Delete from cart empty order
-	 *
-	 * @param array $cart
-	 */
-    private function removeEmptyOrder(array &$cart){
-	    foreach($cart as $key => $booking){
-		    if($booking->getVisitors()->isEmpty()){
-			    unset($cart[$key]);
-		    }
-	    }
-	    $cart = array_values($cart);
-	    $this->session->set('cart', $cart);
-    }
 
 
-	/**
-	 * @param FormInterface $form
-	 * @param array         $cart
-	 */
-	private function saveTickets(FormInterface $form, array  $cart){
-        end($cart)->addVisitors($form->getData()->getVisitors());
-	}
-
-	private function countTickets(array &$cart) {
-		$allVisitors = 0;
-		foreach($cart as $booking){
-			if($visitors = $booking->getVisitors()){
-				$allVisitors += count($visitors);
-			}
-		}
-		return $allVisitors;
-	}
 
 	/*
 	/**

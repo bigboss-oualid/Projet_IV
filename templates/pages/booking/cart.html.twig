@@ -5,7 +5,7 @@
 {% block header %}
     <header class="na-buy">
         <div class="container">
-            <h1 class="col-sm-12 text-center">Votre panier {{ all_visitors }}</h1>
+            <h1 class="col-sm-12 text-center">Votre panier {{ total_visitor_nbr }}</h1>
         </div>
     </header>
 {% endblock %}
@@ -73,7 +73,7 @@
                                     {% if loop.index == 1 %}
                                         <td rowspan=" {{ order.visitorsNbr }} "  class="col-sm-1 align-middle icon-cog-info font-weight-bold">
                                             <span class="mr-sm-4 ml-sm-n1 float-left">{{ orderIndex }}</span>
-                                            <a href="{{ path('remove', { 'idBooking': orderIndex, 'idVisitor': 0 }) }}" class="mt-1 mr-lg-3 ml-sm-n5 float-right btn-outline-danger btn-sm">
+                                            <a href="{{ path('remove', { 'idOrder': orderIndex, 'idVisitor': null }) }}" class="mt-1 mr-lg-3 ml-sm-n5 float-right btn-outline-danger btn-sm">
                                                 <i class="fas fa-trash float-left"></i>
                                             </a>
                                         </td>
@@ -99,7 +99,7 @@
                                             <i class="fas fa-sm fa-euro-sign"></i>
                                         </td>
                                         <td class="col-sm-1 striped-cell text-center">
-                                            <a href="{{ path('remove', { 'idBooking': orderIndex, 'idVisitor': loop.index }) }}" class="btn-outline-danger btn-sm">
+                                            <a href="{{ path('remove', { 'idOrder': orderIndex, 'idVisitor': loop.index }) }}" class="btn-outline-danger btn-sm">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </td>
