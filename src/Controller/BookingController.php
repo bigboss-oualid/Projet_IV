@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 class BookingController extends AbstractController
 {
 	/**
@@ -27,7 +26,6 @@ class BookingController extends AbstractController
 	    $form = $this->createForm(OrderType::class);
 	    $form->remove('visitors');
 	    $form->handleRequest($request);
-
 	    if($form->isSubmitted() && $form->isValid()) {
 	    	$cartService->addOrder($form->getData());
 		    $this->addFlash('success', 'Veuillez entrer les détails pour vos billets');
@@ -55,11 +53,12 @@ class BookingController extends AbstractController
 	    $form->remove('visitorsNbr')
 	         ->remove('fullDay')
 	         ->remove('reservedFor');
+	    $form->setData($cartService->getLastOrder());
 
 	    $form->handleRequest($request);
 
+	    dd($form->getData()->getReservedFor());
 	    if($form->isSubmitted() && $form->isValid()) {
-
 		   $cartService->saveTickets($form->getData());
 
 		    return $this->redirectToRoute('cart');
@@ -107,7 +106,7 @@ class BookingController extends AbstractController
     {
 		if($idVisitor == null){
 			$cartService->deleteOrder($idOrder);
-			$this->addFlash('success', 'Le bouquet des billets n° ' .$idOrder. 'est supprimé avec succès');
+			$this->addFlash('success', 'Le bouquet des billets n° ' .$idOrder. ' est supprimé avec succès');
 		}
         else{
 			$cartService->deleteTicket($idOrder, $idVisitor);

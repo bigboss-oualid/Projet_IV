@@ -22,7 +22,7 @@
                     {% endfor %}
                     {% if not form.vars.valid %}
                         <div class="alert alert-danger">
-                            Veuillez corriger les erreurs avant de passer à l'étape suivant.
+                            Veuillez corriger les erreurs, pour passer à l'étape suivant.
                         </div>
                     {% endif %}
                     {# endFlash message #}
@@ -45,15 +45,17 @@
 {% endblock %}
 
 {% block javascripts %}
+  {# export the code in webpack to pass variable from twig page visitors to webpack, I passed the variable in the orderForm through session service 'Cartservice'
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
     <script>
+        //add Visitors Forms CollectionType
         $(document).ready(function() {
             //Get CollectionType form
             let $container = $('div#order_visitors');
             let ticketNbr = Number('{{ visitorsNbr }}');
 
-            let errors = '{{ form.vars.errors.form.getErrors(true) }}';
+            let errors = '';//'{{ form.vars.errors.form.getErrors(true) }}';
             let i;
             for (i = 0; i < ticketNbr; i++)
             {
@@ -78,5 +80,5 @@
                 //$container.append('<hr>');
             }
         });
-    </script>
+    </script>#}
 {% endblock %}

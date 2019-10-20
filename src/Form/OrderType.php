@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Booking;
+use App\Service\Cart\CartService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -12,13 +13,23 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OrderType extends AbstractType
 {
+	/**
+	 * @var CartService
+	 */
+	private $cartService;
+
+	public function __construct(CartService $cartService)
+	{
+		$this->cartService = $cartService;
+	}
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('visitorsNbr', ChoiceType::class, [
 	            'choices' => $this->getVisitorChoices(),
-
-		            'placeholder' => 'Choose number of visitors ?'
+				'placeholder' => 'Choose number of visitors ?',
+	            'required' => false
 
             ])
 	        ->add('fullDay', ChoiceType::class, [
@@ -26,15 +37,26 @@ class OrderType extends AbstractType
 	        ])
             ->add('reservedFor', DateType::class, [
 	            'widget' => 'single_text',
-	            'input'  => 'datetime_immutable',
-	            'help' => 'Not allowed days'
+	            'html5' => false,//disabled type=date from <input>
+	            'input' => 'datetime',//store input as Datetime in the Object
+	            'format' => 'dd/mm/yyyy',//same format as datepicker (JS)
+
+	            'attr' => [
+		            'data-toggle' => 'datepicker-visit',
+		            'autocomplete' => 'off',
+	            ]
             ])
 
 	        ->add('visitors', CollectionType::class, [
+	        	'attr' => [
+	        		'data-visitors-nbr' => $this->cartService->getLastOrder()->getVisitorsNbr(),
+
+		        ],
 		        'label' => false,
 		        'entry_type' => VisitorType::class,
 		        'allow_add' => true,
 		        'allow_delete' => true,
+		        'error_bubbling' => false,
 	        ])
         ;
     }
@@ -43,7 +65,8 @@ class OrderType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'         => Booking::class,
-	        'translation_domain' => 'forms'
+	        'translation_domain' => 'forms',
+	        'validation_groups' => ['order', 'visitor']
         ]);
     }
 

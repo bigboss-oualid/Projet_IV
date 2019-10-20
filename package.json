@@ -18,9 +18,14 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@chenfengyuan/datepicker": "^1.0.9",
         "babel-preset-es2017": "^6.24.1",
         "babel-preset-flow": "^6.23.0",
+        "bootstrap-datepicker": "^1.9.0",
+        "date-picker": "^0.5.0",
+        "gijgo": "^1.9.13",
         "jquery": "^3.4.1",
-        "popper.js": "^1.15.0"
+        "popper.js": "^1.15.0",
+        "react-datepicker": "^2.9.6"
     }
 }

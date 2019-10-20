@@ -31,3 +31,5 @@ npm-debug.log
 ###> Database migrations ###
 /src/Migrations/
 ###< Database migrations ###
+
+/public/bootstrap-datepicker-master/

@@ -73,8 +73,11 @@ class CartService
 	public function getLastOrder(): Booking
 	{
 		$cart = $this->session->get('cart', []);
-
-		return end($cart);
+		$order = end($cart);
+		if(!empty($order)){
+			return $order;
+		}
+		return new Booking();
 	}
 
 	public function deleteOrder(int $idOrder)

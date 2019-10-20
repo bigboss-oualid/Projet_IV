@@ -92,7 +92,8 @@ Encore
  */
 
 var config = Encore.getWebpackConfig();
-//config.devServer = { port: 8080 }
-//config.externals.jquery = 'jQuery';
+
+//add jQuery from link
+config.externals.jquery = 'jQuery';
 
 module.exports = config;

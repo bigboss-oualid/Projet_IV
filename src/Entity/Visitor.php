@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VisitorRepository")
@@ -18,21 +19,38 @@ class Visitor
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank(message="Le nom est nécessaires",groups={"visitor"}),
+     * @Assert\Length(
+     *     min="2", max="50",
+     *      minMessage = "Le nom doit avoir au minimum {{ limit }} characters",
+     *      maxMessage = "Le nom doit avoir au maximum {{ limit }} characters",
+     *     groups={"visitor"}
+     *     )
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank(message="Le prénom est nécessaires",groups={"visitor"}),
+     * @Assert\Length(
+     *     min="2", max="50",
+     *      minMessage = "Le prénom doit avoir au maximum {{ limit }} characters",
+     *      maxMessage = "Le prénom doit avoir au maximum {{ limit }} characters",
+     *     groups={"visitor"}
+     *     )
      */
     private $firstName;
 
 	/**
 	 * @ORM\Column(type="string", length=70)
+	 * @Assert\Country(groups={"visitor"})
 	 */
 	private $country;
 
 	/**
      * @ORM\Column(type="date")
+	 * @Assert\Date(groups={"visitor"})
+	 * @Assert\NotBlank(groups={"visitor"}, message="La date de naissance est obligatoire")
      */
     private $birthday;
 

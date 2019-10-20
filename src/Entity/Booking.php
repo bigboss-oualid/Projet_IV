@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BookingRepository")
@@ -23,19 +24,16 @@ class Booking
      */
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $clientEmail;
-
-
 	/**
 	 * @ORM\Column(type="integer")
+	 * @Assert\NotBlank(groups={"order"})
 	 */
     private $visitorsNbr;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank(groups={"order"})
+     * @Assert\Date(groups={"order"})
      */
     private $reservedFor;
 
@@ -61,6 +59,7 @@ class Booking
 
 	/**
 	 * @ORM\OneToMany(targetEntity="App\Entity\Visitor", mappedBy="booking", orphanRemoval=true, cascade={"persist"})
+	 * @Assert\Valid(groups={"visitor"})
 	 */
 	private $visitors;
 
@@ -76,17 +75,6 @@ class Booking
 	public function getId(): ?int
 	{
 	     return $this->id;
-	}
-
-	public function getClientEmail() :string
-	{
-		return $this->clientEmail;
-	}
-
-	public function setClientEmail($clientEmail) :string
-	{
-		$this->clientEmail = $clientEmail;
-		return $this;
 	}
 
 	public function getVisitorsNbr()
