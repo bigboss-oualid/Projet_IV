@@ -7,6 +7,7 @@ use App\Service\Cart\CartService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -38,12 +39,10 @@ class OrderType extends AbstractType
             ->add('reservedFor', DateType::class, [
 	            'widget' => 'single_text',
 	            'html5' => false,//disabled type=date from <input>
-	            'input' => 'datetime',//store input as Datetime in the Object
-	            'format' => 'dd/mm/yyyy',//same format as datepicker (JS)
-
+	            'format' => 'dd-MM-yyyy',//same format as JS pickadate but month with upper character small character give mistake
 	            'attr' => [
 		            'data-toggle' => 'datepicker-visit',
-		            'autocomplete' => 'off',
+		            //'autocomplete' => 'off',
 	            ]
             ])
 

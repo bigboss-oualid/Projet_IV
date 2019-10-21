@@ -10,13 +10,12 @@ require('../css/app.css');
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 let $ = require('jquery');
 require('bootstrap');
-import '../../node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min';
-import '../../node_modules/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr.min';
-//import '../../node_modules/gijgo/js/gijgo.min';
-//import '../../node_modules/gijgo/js/messages/messages.fr-fr';
-//import '../../node_modules/@chenfengyuan/datepicker/dist/datepicker';
+
+import '../../node_modules/@bower_components/amsul/lib/picker.js'
+import '../../node_modules/@bower_components/amsul/lib/picker.date'
 
 
+console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 /* home-page display infos about tarifs */
 $('span').ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
@@ -56,6 +55,54 @@ $(document).ready(function() {
     }
 });
 
+//add FR Langauge
+$.extend( $.fn.pickadate.defaults, {
+    monthsFull: [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
+    monthsShort: [ 'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec' ],
+    weekdaysFull: [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ],
+    weekdaysShort: [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ],
+    today: 'Aujourd\'hui',
+    clear: 'Effacer',
+    close: 'Fermer',
+    firstDay: 1,
+    labelMonthNext:"Mois suivant",
+    labelMonthPrev:"Mois précédent",
+    labelMonthSelect:"Sélectionner un mois",
+    labelYearSelect:"Sélectionner une année"
+});
+
+
+var currentYear = new Date().getFullYear();
+
+$('div > [data-toggle="datepicker-visit"]').on('click',function(){
+    $(this).pickadate({
+        format: 'ddd d mmmm, yyyy',
+        formatSubmit: 'dd-mm-yyyy',
+        min: true,
+        selectMonths: true,
+        selectYears: 2, //true
+        disable: [
+            // 0 => january
+                [currentYear,4,1],[currentYear,10,1],[currentYear,11,25],
+                2,
+            ],
+    });
+});
+
+
+$(document).on('click',function(){
+    $('input[id$=_birthday]').pickadate({
+        format: 'ddd d mmmm, yyyy',
+        formatSubmit: 'dd-mm-yyyy',
+        max: true,
+        selectMonths: true,
+        selectYears: 100, //true
+    });
+});
+
+
+
+/*
 $('div > #order_visitedFor').ready(function(){
     $('div > [data-toggle="datepicker-visit"]').datepicker({
         language: 'fr-FR',
@@ -92,70 +139,4 @@ $('document').ready(function(){
         });
     });
 });
-
-/*
-    $(document).on('focus', "div", function() {
-    $(this).datepicker({
-        language: 'fr-FR',
-        format: 'dd/mm/yyyy',
-        autoclose: true,
-        clearBtn: true,
-        orientation: 'auto',
-        startDate: '+0d',
-        title: "Date de visite",
-        todayBtn: true,
-        todayHighlight: true,
-        container: $(document.activeElement).parent(),
-        forceParse: false
-        //endDate:  '+1y',
-        //daysOfWeekHighlighted: [0,6],
-        //container: '#order_reservedFor',
-        //daysOfWeekDisabled: 2,
-        //datesDisabled: [], Array of date strings or a single date string formatted in the given date format
-
-    });
-});
-
-    let now = new Date();
-    let today = (function() {
-        let day = ("0" + now.getDate()).slice(-2);
-        let month = ("0" + now.getMonth()).slice(-2);
-        let year = now.getFullYear();
-
-        return day + '/' + month + '/' + year;
-    })();
-
-//minDate und maxDate
-let now = new Date();
-let yesterday = function() {
-    date.setDate(date.getDate()-1);
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-};
-let tomorrow = (function() {
-    now.setDate(now.getDate()+1);
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
-})();
-
-/*disableDates:  function (date) {
-    var disabled = [10,15,20,25];
-    if (disabled.indexOf(date.getDate()) == -1 ) {
-        return true;
-    } else {
-        return false;
-    }
-}
-let now = new Date();
-    let today = (function() {
-        let day = ("0" + now.getDate()).slice(-2);
-        let month = ("0" + now.getMonth()).slice(-2);
-        let year = now.getFullYear();
-
-        return day + '/' + month + '/' + year;
-    })();
 */
-
-
-
-
-
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');

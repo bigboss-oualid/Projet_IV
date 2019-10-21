@@ -7,8 +7,8 @@
  */
 @import "~bootstrap/dist/css/bootstrap";
 @import "~@fortawesome/fontawesome-free/css/all";
-@import 'datepicker.css';
-
+@import "~@bower_components/amsul/lib/themes/default.css";
+@import "~@bower_components/amsul/lib/themes/default.date.css";
 
 /*center logo navbar*/
 .center-logo {
@@ -82,7 +82,11 @@
 }
 /********* END Hover image & text *******/
 
+
 /*Creative*/
+.bg-nav-color {
+    background-color: #c92d02;
+}
 body {
     color: #2c2c2c;
     font-size: 20px;

@@ -32,7 +32,7 @@ class VisitorType extends AbstractType
 		        'widget' => 'single_text',
 		        'html5' => false,//disabled type=date from <input>
 		        'input' => 'datetime',//store input as Datetime in the Object
-		        'format' => 'dd/mm/yyyy',//same format as datepicker (JS)
+		        'format' => 'dd-MM-yyyy',//same format as datepicker (JS)
 
 		        'attr' => [
 			        'class' => 'datepicker-ticket',
