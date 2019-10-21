@@ -5,7 +5,7 @@
 {% block header %}
     <header class="na-buy">
         <div class="container">
-            <h1 class="col-sm-12 text-center">Votre panier {{ total_visitor_nbr }}</h1>
+            <h1 class="col-sm-12 text-center">Votre panier {% if total_visitor_nbr is empty %} {{ ' est Vide' }} {% else %} {{ ' contient ' ~total_visitor_nbr~ 'billet(s)'}} {% endif %} </h1>
         </div>
     </header>
 {% endblock %}
@@ -26,6 +26,7 @@
             </div>
             <div class="h-100 justify-content-center">
                 <div class="row bg-light p-3">
+                    {% if orders | length > 0 %}
                     <span class="col-sm-6 mt-2">
                         <a href="{{ path('booking') }}" class="float-right btn btn-success btn-sm"><span class="d-md-inline-block mr-2 font-weight-bold">Ajouter Billets </span><i class="icon-cog-gold fas fa-cart-plus"></i></a>
                     </span>
@@ -35,7 +36,6 @@
                 </div>
 
                 <div >
-                {% if orders | length > 0 %}
                     <table class="table table-striped-default">
                         <caption class="text-right">
                             <a href="#" class="btn btn-info btn-lg my-anima">
@@ -115,6 +115,11 @@
                         </tbody>
                     </table>
                 {% else %}
+                    <span class="col-sm-12 mt-2">
+                        <div class="text-center">
+                        <a href="{{ path('booking') }}" class="btn btn-success btn-sm"><span class="d-md-inline-block mr-2 font-weight-bold">Ajouter Billets </span><i class="icon-cog-gold fas fa-cart-plus"></i></a></div>
+                    </span>
+                </div>
                     <p>Votre Panier est vide</p>
                 {% endif %}
                 </div>
