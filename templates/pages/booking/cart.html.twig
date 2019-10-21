@@ -122,16 +122,11 @@
         </div>
     </section>
     <!--Section: Booking-->
-
-{% endblock %}
-
-
-{% block javascripts %}
     <script>
         let toggledElt  = document.querySelector(".my-anima");
 
         function startAnimation() {
-                toggledElt.classList.toggle("icon-cog-success");
+            toggledElt.classList.toggle("icon-cog-success");
         }
         setInterval(startAnimation, 1000);
 
@@ -140,4 +135,6 @@
             tdElt.classList.add('color-Bottom');
         }
     </script>
+
 {% endblock %}
+

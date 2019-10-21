@@ -60,6 +60,7 @@ class CartService
 		}
 		$cart = array_values($cart);
 		$this->session->set('cart', $cart);
+		if(empty($cart)) return [];
 		return [
 			'cart' => $cart,
 			'last_price'=> $lastPrice,

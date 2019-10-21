@@ -15,7 +15,7 @@
     </head>
     <body>
 {# Navbar #}
-    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark main-nav">
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-nav-color main-nav">
         <div class="container">
             <a class="navbar-brand center-logo" href="#"><img src="{{ asset('images/louvre-log-origo.png') }}" alt=""></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,11 @@
                             <a class="font-weight-bold nav-link dropdown-toggle text-warning" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Panier</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{{ path('cart') }}"><i class="fas fa-shopping-cart icon-cog-cold"></i> Votre panier
+                                    {%  set ticketsNbr = ''%}
+                                    {% for cart in app.session.get('cart') %}
+                                        {% set ticketsNbr =  cart.visitorsNbr%}
+                                    {% endfor %}
+                                    {{ ticketsNbr }}
                                 </a>
                                 <a class="dropdown-item" href="{{ path('cleancart') }}"><i class="fas fa-broom icon-cog-cold"></i> Vider le panier
                                 </a>
