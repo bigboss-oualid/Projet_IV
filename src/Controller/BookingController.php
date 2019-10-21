@@ -65,13 +65,13 @@ class BookingController extends AbstractController
 	    $form->remove('visitorsNbr')
 	         ->remove('fullDay')
 	         ->remove('reservedFor');
+	    dump($this->cartService->getLastOrder());
 	    $form->setData($this->cartService->getLastOrder());
-
 	    $form->handleRequest($request);
 
 	    //dd($form->getData()->getReservedFor());
 	    if($form->isSubmitted() && $form->isValid()) {
-		   $this->cartService->saveTickets($form->getData());
+		    $this->cartService->saveTickets($form->getData());
 
 		    return $this->redirectToRoute('cart');
 	    }
@@ -93,6 +93,12 @@ class BookingController extends AbstractController
     {
 	    $cartInfo = $this->cartService->getCartInfo();
 
+	    if(empty($cartInfo)) return $this->render('pages/booking/cart.html.twig', [
+		    'current_menu'  => 'Booking',
+		    'total_visitor_nbr'  => null,
+		    'orders'        => [],
+	    ]);
+
 	    return $this->render('pages/booking/cart.html.twig', [
 		    'current_menu'  => 'Booking',
 		    'orders'        => $cartInfo['cart'],
@@ -113,12 +119,13 @@ class BookingController extends AbstractController
     public function remove(int $idOrder, int $idVisitor=null): RedirectResponse
     {
 		if($idVisitor == null){
-			$this->cartService->deleteOrder($idOrder);
-			$this->addFlash('success', 'Le bouquet des billets n° ' .$idOrder. ' est supprimé avec succès');
+			$reserverFor = $this->cartService->deleteOrder($idOrder);
+			$this->addFlash('success', 'La réservation pour le ' .$reserverFor->format('d/m/Y'). ' a été annulé avec  succès');
 		}
         else{
-			$this->cartService->deleteTicket($idOrder, $idVisitor);
-		    $this->addFlash('success', 'Le billet n° '. $idVisitor .' du bouquet '. $idOrder .' est supprimé avec succès');
+
+			$infoTicket = $this->cartService->deleteTicket($idOrder, $idVisitor);
+		    $this->addFlash('success', 'Le billet de M./MM. '. $infoTicket['name'] .' pour la date '. $infoTicket['reserved_for']->format('d/m/Y').' a été supprimé avec  succès');
         }
 
 	    return $this->redirectToRoute('cart');

@@ -28,7 +28,8 @@ $(document).ready(function() {
     //get visitors number from attr send from VisitorsType.php
     let ticketNbr = Number($("div[data-visitors-nbr]").attr('data-visitors-nbr'));
 
-    let errors = '';//'{{ form.vars.errors.form.getErrors(true) }}';
+    //get error-data from visitors.html.twig;
+    let errors = $("div[error-data]").attr('error-data');
 
     let i;
     for (i = 0; i < ticketNbr; i++)

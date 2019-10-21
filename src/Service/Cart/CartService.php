@@ -46,6 +46,7 @@ class CartService
 	public function getCartInfo() :array
 	{
 		$cart = $this->session->get('cart', []);
+		if(empty($cart)) return [];
 		$lastPrice = 0;
 		$totalVisitorNbr = 0;
 		foreach($cart as $key => $booking){
@@ -60,7 +61,6 @@ class CartService
 		}
 		$cart = array_values($cart);
 		$this->session->set('cart', $cart);
-		if(empty($cart)) return [];
 		return [
 			'cart' => $cart,
 			'last_price'=> $lastPrice,
@@ -81,17 +81,32 @@ class CartService
 		return new Booking();
 	}
 
-	public function deleteOrder(int $idOrder)
+	/**
+	 * @param int $idOrder
+	 *
+	 * @return \DateTime
+	 */
+	public function deleteOrder(int $idOrder): \DateTime
 	{
 		$cart = $this->session->get('cart', []);
+		$reservedFor = $cart[$idOrder-1]->getReservedFor();
 		unset($cart[$idOrder-1]);
 		$this->session->set('cart', $cart);
+		return $reservedFor;
 	}
 
-	public function deleteTicket(int $idOrder, int $idVisitor)
+	/**
+	 * @param int $idOrder
+	 * @param int $idVisitor
+	 *
+	 * @return array
+	 */
+	public function deleteTicket(int $idOrder, int $idVisitor): array
 	{
 		$cart = $this->session->get('cart', []);
 		$order = &$cart[$idOrder - 1];
+		$reservedFor = $order->getReservedFor();
+		$name = $order->getVisitors()[$idVisitor - 1]->getLastName();
 
 		$order->getVisitors()->remove($idVisitor - 1);
 		if (!$order->getVisitors()->isEmpty()) {
@@ -105,6 +120,10 @@ class CartService
 			$order->setVisitorsNbr($order->getVisitorsNbr()-1);
 		}
 		$this->session->set('cart', $cart);
+		return[
+			'name' => $name,
+			'reserved_for' => $reservedFor
+		];
 	}
 
 	public function clean()
