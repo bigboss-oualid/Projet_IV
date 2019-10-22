@@ -34,29 +34,6 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav">
-                    {% if cart is defined and cart == 'full' %}
-                        <li class="nav-item dropdown">
-                            <a class="font-weight-bold nav-link dropdown-toggle " data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                <span class="mt-n1 fa-stack mr-n2">
-                                    <span class="light fa fa-shopping-cart fa-stack-2x"><strong class="align-middle text-dark fa-stack-1x mt-1 ml-1" style="font-size:55%;">
-                                    {% set ticketsNbr = '0'%}
-                                    {% for order in app.session.get('cart') %}
-                                        {% if order.visitors is not empty %}
-                                        {% set ticketsNbr = ticketsNbr|number_format + order.visitorsNbr|number_format %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    {{ ticketsNbr }}
-                                    </strong></span>
-                                </span>
-                            </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ path('cart') }}"><i class="fas fa-shopping-cart icon-cog-cold"></i> Aller au panier
-                                </a>
-                                <a class="dropdown-item" href="{{ path('cleancart') }}"><i class="fas fa-broom icon-cog-cold"></i> Vider le panier
-                                </a>
-                            </div>
-                        </li>
-                    {% endif %}
                     <li class="nav-item dropdown">
                         <a class="font-weight-bold nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Langues</a>
                         <div class="dropdown-menu">
@@ -68,6 +45,29 @@
                             </a>
                         </div>
                     </li>
+                    {% if cart is defined and cart == 'full' %}
+                        <li class="nav-item dropdown">
+                            <a class="font-weight-bold nav-link dropdown-toggle " data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="mt-n1 fa-stack mr-n2">
+                                    <span class="light fa fa-shopping-cart fa-stack-2x"><strong class="align-middle cart-text fa-stack-1x mt-1 ml-1" style="font-size:55%;">
+                                    {% set ticketsNbr = '0'%}
+                                            {% for order in app.session.get('cart') %}
+                                                {% if order.visitors is not empty %}
+                                                    {% set ticketsNbr = ticketsNbr|number_format + order.visitorsNbr|number_format %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {{ ticketsNbr }}
+                                    </strong></span>
+                                </span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{ path('cart') }}"><i class="fas fa-shopping-cart icon-cog-cold"></i> Aller au panier
+                                </a>
+                                <a class="dropdown-item" href="{{ path('cleancart') }}"><i class="fas fa-broom icon-cog-cold"></i> Vider le panier
+                                </a>
+                            </div>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

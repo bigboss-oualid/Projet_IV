@@ -31,6 +31,12 @@
 {
     color: rgba(255, 255, 255, 0.5);
 }
+.cart-text {
+    color: rgba(255, 234, 0) !important;
+    text-shadow: 1.5px 1.5px 1.5px #000000;
+    font-weight: bolder;
+    font-size: large !important;
+}
 
 /********* Hover image & text *******/
 /* Image */

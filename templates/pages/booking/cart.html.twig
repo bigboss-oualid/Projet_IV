@@ -5,7 +5,7 @@
 {% block header %}
     <header class="na-buy">
         <div class="container">
-            <h1 class="col-sm-12 text-center">Votre panier {% if total_visitor_nbr is empty %} {{ ' est Vide' }} {% else %} {{ ' contient ' ~total_visitor_nbr~ 'billet(s)'}} {% endif %} </h1>
+            <h1 class="col-sm-12 text-center">Votre panier {% if total_visitor_nbr is empty %} {{ ' est Vide' }} {% else %} {{ ' contient '}} <span class="text-warning font-weight-bolder">{{ total_visitor_nbr}} </span> {{ ' billet(s)'}} {% endif %} </h1>
         </div>
     </header>
 {% endblock %}
