@@ -72,21 +72,47 @@ $.extend( $.fn.pickadate.defaults, {
     labelYearSelect:"Sélectionner une année"
 });
 
+function checkSelectedDay(context) {
+    /*
+     * get local DateTime, selected Date & split them to [dd/mm/yyy] [à] [(H):(i):(s)]
+     */
+    let dateNow = new Date();
+    let dateLocal= dateNow.toLocaleString('fr-Fr');
+    let dividedDay = dateLocal.split(' ')
+    let selectedDate = new Date(context.select).toLocaleString('fr-Fr');
+    let SelectedSplittedDate = selectedDate.split(' ')
+    let time = dividedDay[2].split(':')
 
-var currentYear = new Date().getFullYear();
+    let selectTiTyElt = document.getElementById('order_fullDay');
+    let choiceOptionElt = selectTiTyElt.children[0];
 
+    if (dividedDay[0] === SelectedSplittedDate[0] && Number(time[0]) > 13 ){
+        choiceOptionElt.style.display = 'none'
+        selectTiTyElt.value = selectTiTyElt.children[1].value;
+    } else {
+        choiceOptionElt.style.display = 'block'
+        selectTiTyElt.value = selectTiTyElt.children[0].value;
+    }
+}
+
+let currentYear = new Date().getFullYear();
 $('div > [data-toggle="datepicker-visit"]').on('click',function(){
     $(this).pickadate({
-        format: 'ddd d mmmm, yyyy',
-        formatSubmit: 'dd-mm-yyyy',
+        format: 'ddd d mmmm yyyy',
+        formatSubmit: 'dd/mm/yyyy',
         min: true,
         selectMonths: true,
         selectYears: 2, //true
         disable: [
-            // 0 => january
+            // month start with 0 index (0 =>juanary)
+            //disabled Holidays and Thursdays
                 [currentYear,4,1],[currentYear,10,1],[currentYear,11,25],
                 2,
             ],
+        //remove select option full-day if user select today as visit date
+        onSet: function(context) {
+            checkSelectedDay(context);
+        }
     });
 });
 
@@ -94,50 +120,9 @@ $('div > [data-toggle="datepicker-visit"]').on('click',function(){
 $(document).on('click',function(){
     $('input[id$=_birthday]').pickadate({
         format: 'ddd d mmmm, yyyy',
-        formatSubmit: 'dd-mm-yyyy',
+        formatSubmit: 'dd/mm/yyyy',
         max: true,
         selectMonths: true,
         selectYears: 100, //true
     });
 });
-
-
-
-/*
-$('div > #order_visitedFor').ready(function(){
-    $('div > [data-toggle="datepicker-visit"]').datepicker({
-        language: 'fr-FR',
-        format: 'dd/mm/yyyy',
-        autoclose: true,
-        clearBtn: true,
-        orientation: 'auto',
-        startDate: '+0d',
-        title: "Date de visite",
-        todayBtn: true,
-        todayHighlight: true,
-        daysOfWeekDisabled: [2],
-        container: $(document.activeElement).parent(),
-        endDate:  '+1y',
-        //daysOfWeekHighlighted: [0,6],
-        //datesDisabled: [], Array of date strings or a single date string formatted in the given date format
-
-    });
-});
-
-$('document').ready(function(){
-    $("input[id$=_birthday]").each( function () {
-        $(this).datepicker({
-            language: 'fr-FR',
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            clearBtn: true,
-            orientation: 'bottom',
-            endDate: '+1d',
-            title: "Date de naissance",
-            todayBtn: true,
-            todayHighlight: true,
-            container: $("input[id$=_birthday]").offsetParent(),
-        });
-    });
-});
-*/

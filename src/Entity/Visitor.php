@@ -56,6 +56,9 @@ class Visitor
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\Choice(
+     *     choices = { true, false },groups={"visitor"}
+     * )
      */
     private $discount;
 

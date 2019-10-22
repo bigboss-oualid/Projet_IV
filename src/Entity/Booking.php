@@ -6,16 +6,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraints as CustomAssert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BookingRepository")
+ * @CustomAssert\ConstraintsVisitDate(groups={"order"})
  */
 class Booking
 {
 
-	const TYPE_TICKET= [
-        'Day'      => 1,
-        'Half day' => 0,
+	const FULL_DAY_TICKET = [
+        'Day'      => true,
+        'Half day' => false,
 	];
     /**
      * @ORM\Id()
@@ -39,6 +41,9 @@ class Booking
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\Choice(
+     *     choices = { true, false},groups={"order"}
+     * )
      */
     private $fullDay;
 
@@ -94,7 +99,7 @@ class Booking
         return $this->reservedFor;
     }
 
-    public function setReservedFor(\DateTimeInterface $reservedFor): self
+    public function setReservedFor( $reservedFor): self
     {
         $this->reservedFor = $reservedFor;
 
@@ -118,7 +123,7 @@ class Booking
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt( $createdAt): self
     {
         $this->createdAt = $createdAt;
 

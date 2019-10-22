@@ -34,12 +34,12 @@ class OrderType extends AbstractType
 
             ])
 	        ->add('fullDay', ChoiceType::class, [
-		        'choices' => Booking::TYPE_TICKET,
+		        'choices' => Booking::FULL_DAY_TICKET,
 	        ])
             ->add('reservedFor', DateType::class, [
 	            'widget' => 'single_text',
 	            'html5' => false,//disabled type=date from <input>
-	            'format' => 'dd-MM-yyyy',//same format as JS pickadate but month with upper character small character give mistake
+	            'format' => 'dd/MM/yyyy',//same format as JS pickadate but month with upper character small character give mistake
 	            'attr' => [
 		            'data-toggle' => 'datepicker-visit',
 		            //'autocomplete' => 'off',

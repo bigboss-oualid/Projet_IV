@@ -40,6 +40,7 @@ class BookingController extends AbstractController
 	    $form = $this->createForm(OrderType::class);
 	    $form->remove('visitors');
 	    $form->handleRequest($request);
+	    dump($form->getData());
 	    if($form->isSubmitted() && $form->isValid()) {
 		    $this->cartService->addOrder($form->getData());
 		    $this->addFlash('success', 'Veuillez entrer les détails pour vos billets');
