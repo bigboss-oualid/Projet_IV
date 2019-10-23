@@ -50,7 +50,8 @@ class Visitor
 	/**
      * @ORM\Column(type="date")
 	 * @Assert\Date(groups={"visitor"})
-	 * @Assert\NotBlank(groups={"visitor"}, message="La date de naissance est obligatoire")
+	 * @Assert\NotBlank(groups={"visitor"}, message="birthday is necessary")
+	 * @Assert\LessThanOrEqual("today", groups={"visitor"})
      */
     private $birthday;
 

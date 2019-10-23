@@ -13,8 +13,7 @@ class ConstraintsVisitDate extends Constraint
      * Any public properties become valid options for the annotation.
      * Then, use these in your validator class.
      */
-    public $afternoonMessage = "Today you can't choose a full day ticket";
-	public $pastMessage = "Yesterday is gone, you can visit us today or tomorrow... :)";
+    public $message = "Today you can't choose a full day ticket";
 
 
     //Add Constraint to Class Booking

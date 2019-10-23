@@ -72,25 +72,26 @@ $.extend( $.fn.pickadate.defaults, {
     labelYearSelect:"Sélectionner une année"
 });
 
+//remove select option full-day if user select today as visit date
 function checkSelectedDay(context) {
     /*
      * get local DateTime, selected Date & split them to [dd/mm/yyy] [à] [(H):(i):(s)]
      */
     let dateNow = new Date();
     let dateLocal= dateNow.toLocaleString('fr-Fr');
-    let dividedDay = dateLocal.split(' ')
+    let dividedDay = dateLocal.split(' ');
     let selectedDate = new Date(context.select).toLocaleString('fr-Fr');
-    let SelectedSplittedDate = selectedDate.split(' ')
-    let time = dividedDay[2].split(':')
+    let SelectedSplittedDate = selectedDate.split(' ');
+    let time = dividedDay[2].split(':');
 
     let selectTiTyElt = document.getElementById('order_fullDay');
     let choiceOptionElt = selectTiTyElt.children[0];
 
     if (dividedDay[0] === SelectedSplittedDate[0] && Number(time[0]) > 13 ){
-        choiceOptionElt.style.display = 'none'
+        choiceOptionElt.style.display = 'none';
         selectTiTyElt.value = selectTiTyElt.children[1].value;
     } else {
-        choiceOptionElt.style.display = 'block'
+        choiceOptionElt.style.display = 'block';
         selectTiTyElt.value = selectTiTyElt.children[0].value;
     }
 }
@@ -104,12 +105,11 @@ $('div > [data-toggle="datepicker-visit"]').on('click',function(){
         selectMonths: true,
         selectYears: 2, //true
         disable: [
-            // month start with 0 index (0 =>juanary)
-            //disabled Holidays and Thursdays
+                // month start with 0 index (0 =>juanary)
+                //disabled Holidays and Thursdays
                 [currentYear,4,1],[currentYear,10,1],[currentYear,11,25],
                 2,
             ],
-        //remove select option full-day if user select today as visit date
         onSet: function(context) {
             checkSelectedDay(context);
         }

@@ -36,6 +36,7 @@ class Booking
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(groups={"order"})
      * @Assert\Date(groups={"order"})
+     * @Assert\GreaterThanOrEqual("today", groups={"visitor"})
      */
     private $reservedFor;
 
