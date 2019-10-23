@@ -45,19 +45,13 @@
                             </a>
                         </div>
                     </li>
-                    {% if cart is defined and cart == 'full' %}
+                    {% if cart is defined and cart is not empty %}
                         <li class="nav-item dropdown">
                             <a class="font-weight-bold nav-link dropdown-toggle " data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                 <span class="mt-n1 fa-stack mr-n2">
-                                    <span class="light fa fa-shopping-cart fa-stack-2x"><strong class="align-middle cart-text fa-stack-1x mt-1 ml-1" style="font-size:55%;">
-                                    {% set ticketsNbr = '0'%}
-                                            {% for order in app.session.get('cart') %}
-                                                {% if order.visitors is not empty %}
-                                                    {% set ticketsNbr = ticketsNbr|number_format + order.visitorsNbr|number_format %}
-                                                {% endif %}
-                                            {% endfor %}
-                                            {{ ticketsNbr }}
-                                    </strong></span>
+                                    <span class="light fa fa-shopping-cart fa-stack-2x">
+                                        <strong class="align-middle cart-text fa-stack-1x mt-1 ml-1" style="font-size:55%;"> {{ cart['total_visitor_nbr'] }}</strong>
+                                    </span>
                                 </span>
                             </a>
                             <div class="dropdown-menu">

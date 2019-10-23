@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BookingController extends AbstractController
 {
-
 	/**
 	 * @var CartService
 	 */
@@ -37,20 +36,22 @@ class BookingController extends AbstractController
 	 */
     public function booking(Request $request): Response
     {
+	    $this->cartService->refresh();
+	    dump($this->cartService->getCart());
 	    $form = $this->createForm(OrderType::class);
 	    $form->remove('visitors');
 	    $form->handleRequest($request);
-	    dump($form->getData());
 	    if($form->isSubmitted() && $form->isValid()) {
 		    $this->cartService->addOrder($form->getData());
 		    $this->addFlash('success', 'Veuillez entrer les détails pour vos billets');
 
 			return $this->redirectToRoute('visitors');
 	    }
+	    $cartInfo = $this->cartService->getCartInfo();
         return $this->render('pages/booking/order.html.twig', [
 	        'current_menu'  => 'Booking',
 	        'form'          => $form->createView(),
-	        'cart'          => $this->cartService->fullCart()
+	        'cart'          => $cartInfo,
         ]);
     }
 
@@ -66,22 +67,19 @@ class BookingController extends AbstractController
 	    $form->remove('visitorsNbr')
 	         ->remove('fullDay')
 	         ->remove('reservedFor');
-	    dump($this->cartService->getLastOrder());
+
 	    $form->setData($this->cartService->getLastOrder());
 	    $form->handleRequest($request);
-
-	    //dd($form->getData()->getReservedFor());
 	    if($form->isSubmitted() && $form->isValid()) {
-		    $this->cartService->saveTickets($form->getData());
-
+		    $this->cartService->refresh();
 		    return $this->redirectToRoute('cart');
 	    }
-
+		$cartInfo = $this->cartService->getCartInfo();
 	    return $this->render('pages/booking/visitors.html.twig', [
 		    'current_menu'  => 'Booking',
 		    'form'          => $form->createView(),
 		    'visitorsNbr'   => $this->cartService->getLastOrder()->getVisitorsNbr(),
-		    'cart'          => $this->cartService->fullCart()
+		    'cart'          => $cartInfo,
 	    ]);
     }
 
@@ -94,18 +92,16 @@ class BookingController extends AbstractController
     {
 	    $cartInfo = $this->cartService->getCartInfo();
 
-	    if(empty($cartInfo)) return $this->render('pages/booking/cart.html.twig', [
-		    'current_menu'  => 'Booking',
-		    'total_visitor_nbr'  => null,
-		    'orders'        => [],
-	    ]);
+	    if(empty($cartInfo))
+	    	return $this->render('pages/booking/cart.html.twig', [
+			    'current_menu'  => 'Booking',
+			    'total_visitor_nbr'  => null,
+			    'orders'        => [],
+	         ]);
 
 	    return $this->render('pages/booking/cart.html.twig', [
 		    'current_menu'  => 'Booking',
-		    'orders'        => $cartInfo['cart'],
-		    'last_price'    => $cartInfo['last_price'],
-		    'total_visitor_nbr'  => $cartInfo['total_visitor_nbr'],
-		    'cart'          => $this->cartService->fullCart()
+		    'cart'          => $cartInfo
 	    ]);
     }
 
@@ -120,8 +116,8 @@ class BookingController extends AbstractController
     public function remove(int $idOrder, int $idVisitor=null): RedirectResponse
     {
 		if($idVisitor == null){
-			$reserverFor = $this->cartService->deleteOrder($idOrder);
-			$this->addFlash('success', 'La réservation pour le ' .$reserverFor->format('d/m/Y'). ' a été annulé avec  succès');
+			$reservedFor = $this->cartService->deleteOrder($idOrder);
+			$this->addFlash('success', 'La réservation pour le ' .$reservedFor->format('d/m/Y'). ' a été annulé avec  succès');
 		}
         else{
 

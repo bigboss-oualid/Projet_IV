@@ -48,14 +48,14 @@ class Visitor
 	private $country;
 
 	/**
-     * @ORM\Column(type="date")
-	 * @Assert\Date(groups={"visitor"})
+	 * @ORM\Column(type="date")
 	 * @Assert\NotBlank(groups={"visitor"}, message="birthday is necessary")
+	 * @Assert\Date(groups={"visitor"})
 	 * @Assert\LessThanOrEqual("today", groups={"visitor"})
-     */
-    private $birthday;
+	 */
+	private $birthday;
 
-    /**
+	/**
      * @ORM\Column(type="boolean")
      * @Assert\Choice(
      *     choices = { true, false },groups={"visitor"}
@@ -133,7 +133,7 @@ class Visitor
         return $this->birthday;
     }
 
-	public function setBirthday(\DateTimeInterface $birthday): self
+	public function setBirthday( $birthday): self
     {
         $this->birthday = $birthday;
 

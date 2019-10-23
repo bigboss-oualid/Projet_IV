@@ -5,7 +5,7 @@
 {% block header %}
     <header class="na-buy">
         <div class="container">
-            <h1 class="col-sm-12 text-center">Votre panier {% if total_visitor_nbr is empty %} {{ ' est Vide' }} {% else %} {{ ' contient '}} <span class="text-warning font-weight-bolder">{{ total_visitor_nbr}} </span> {{ ' billet(s)'}} {% endif %} </h1>
+            <h1 class="col-sm-12 text-center">Votre panier {% if cart is defined and cart['total_visitor_nbr'] is not empty %} {{ ' contient '}} <span class="text-warning font-weight-bolder">{{ cart['total_visitor_nbr']}} </span> {{ ' billet(s)'}} {% else %} {{ ' est Vide' }}   {% endif %} </h1>
         </div>
     </header>
 {% endblock %}
@@ -26,7 +26,7 @@
             </div>
             <div class="h-100 justify-content-center">
                 <div class="row bg-light p-3">
-                    {% if orders | length > 0 %}
+                    {% if cart is defined and cart['orders'] | length > 0  %}
                     <span class="col-sm-6 mt-2">
                         <a href="{{ path('booking') }}" class="float-right btn btn-success btn-sm"><span class="d-md-inline-block mr-2 font-weight-bold">Ajouter Billets </span><i class="icon-cog-gold fas fa-cart-plus"></i></a>
                     </span>
@@ -62,11 +62,11 @@
                         <tfoot>
                             <tr>
                                 <td  colspan="6"><h4 class="text-right">La somme à payer :</h4></td>
-                                <td class="text-right font-weight-bolder"><h4>{{last_price}} <i class="fas fa-500px fa-euro-sign"></i></h4></td>
+                                <td class="text-right font-weight-bolder"><h4>{{ cart['last_price'] }} <i class="fas fa-500px fa-euro-sign"></i></h4></td>
                             </tr>
                         </tfoot>
-                        <tbody>{{ dump(orders)  }}
-                            {% for order in orders %}
+                        <tbody>{{ dump(cart['orders'])  }}
+                            {% for order in cart['orders'] %}
                                 {% set orderIndex = loop.index %}
                                 {% for visitor in order.visitors %}
                                     <tr>

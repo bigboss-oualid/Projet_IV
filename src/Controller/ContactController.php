@@ -37,10 +37,11 @@ class ContactController extends AbstractController
 			return $this->redirectToRoute('contact');
 
 		}
+		$cartInfo = $cartService->getCartInfo();
 		return $this->render('pages/contact.html.twig', [
 			'current_menu' => 'Contact',
 			'form' => $form->createView(),
-			'cart'          => $cartService->fullCart()
+			'cart'          => $cartInfo,
 		]);
 	}
 }

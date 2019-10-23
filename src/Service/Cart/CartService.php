@@ -9,10 +9,12 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class CartService
 {
 	protected $session;
+	private $cart;
 
 	public function __construct(SessionInterface $session)
 	{
 		$this->session = $session;
+		$this->cart = $this->session->get('cart', []);
 	}
 
 	/**
@@ -20,22 +22,8 @@ class CartService
 	 */
 	public function addOrder(Booking $order)
 	{
-		$cart = $this->session->get('cart', []);
-		array_push($cart ,$order);
-		$this->session->set('cart', $cart);
-	}
-
-	/**
-	 * @param Booking $order
-	 *
-	 */
-	public function saveTickets(Booking $order){
-
-		$cart = $this->session->get('cart', []);
-
-		end($cart)->addVisitors($order->getVisitors());
-
-		$this->session->set('cart', $cart);
+		array_push($this->cart ,$order);
+		$this->session->set('cart', $this->cart);
 	}
 
 	/**
@@ -45,24 +33,18 @@ class CartService
 	 */
 	public function getCartInfo() :array
 	{
-		$cart = $this->session->get('cart', []);
-		if(empty($cart)) return [];
+		if(empty($this->cart)) return [];
 		$lastPrice = 0;
 		$totalVisitorNbr = 0;
-		foreach($cart as $key => $booking){
-			if($booking->getVisitors()->isEmpty()){
-				unset($cart[$key]);
-			}
-			else{
-				$booking->setTotalPrice();
-				$lastPrice += $booking->getTotalPrice();
-				$totalVisitorNbr += count($booking->getVisitors());
-			}
+		foreach($this->cart as $key => $booking){
+			$booking->setTotalPrice();
+			$lastPrice += $booking->getTotalPrice();
+			$totalVisitorNbr += count($booking->getVisitors());
 		}
-		$cart = array_values($cart);
-		$this->session->set('cart', $cart);
+		$this->cart = array_values($this->cart);
+		$this->session->set('cart', $this->cart);
 		return [
-			'cart' => $cart,
+			'orders' => $this->cart,
 			'last_price'=> $lastPrice,
 			'total_visitor_nbr' => $totalVisitorNbr
 		];
@@ -73,8 +55,7 @@ class CartService
 	 */
 	public function getLastOrder(): Booking
 	{
-		$cart = $this->session->get('cart', []);
-		$order = end($cart);
+		$order = end($this->cart);
 		if(!empty($order)){
 			return $order;
 		}
@@ -88,10 +69,9 @@ class CartService
 	 */
 	public function deleteOrder(int $idOrder): \DateTime
 	{
-		$cart = $this->session->get('cart', []);
-		$reservedFor = $cart[$idOrder-1]->getReservedFor();
-		unset($cart[$idOrder-1]);
-		$this->session->set('cart', $cart);
+		$reservedFor = $this->cart[$idOrder-1]->getReservedFor();
+		unset($this->cart[$idOrder-1]);
+		$this->session->set('cart', $this->cart);
 		return $reservedFor;
 	}
 
@@ -103,8 +83,7 @@ class CartService
 	 */
 	public function deleteTicket(int $idOrder, int $idVisitor): array
 	{
-		$cart = $this->session->get('cart', []);
-		$order = &$cart[$idOrder - 1];
+		$order = &$this->cart[$idOrder - 1];
 		$reservedFor = $order->getReservedFor();
 		$name = $order->getVisitors()[$idVisitor - 1]->getLastName();
 
@@ -119,7 +98,7 @@ class CartService
 			//reduce visitor number
 			$order->setVisitorsNbr($order->getVisitorsNbr()-1);
 		}
-		$this->session->set('cart', $cart);
+		$this->session->set('cart', $this->cart);
 		return[
 			'name' => $name,
 			'reserved_for' => $reservedFor
@@ -131,10 +110,23 @@ class CartService
 		$this->session->remove('cart');
 	}
 
-	public function fullCart() {
-		if(empty($this->session->get('cart'))){
-			return null;
+	/**
+	 * delete $cart without visitor
+	 */
+	public function refresh()
+	{
+		foreach($this->cart as $key => $booking){
+			if($booking->getVisitors()->isEmpty()){
+				unset($this->cart[$key]);
+			}
 		}
-		return 'full';
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getCart()
+	{
+		return $this->cart;
 	}
 }

@@ -25,9 +25,10 @@ class HomeController extends AbstractController
 	 */
 	public function home(CartService $cartService): Response
 	{
+		$cartInfo = $cartService->getCartInfo();
 		return $this->render('pages/home.html.twig',[
 			'current_menu' => 'Home',
-			'cart'          => $cartService->fullCart()
+			'cart'          => $cartInfo,
 		]);
 	}
 }
