@@ -96,26 +96,30 @@ function checkSelectedDay(context) {
     }
 }
 
-let currentYear = new Date().getFullYear();
+let currentYear = (new Date().getFullYear());
+let holidays = []
+// month start with 0 index (2019/4/1 =>2019/mai/1)
+for (let i = 0; i< 3; i++){
+    holidays.push([currentYear+i,4,1],[currentYear+i,10,1],[currentYear+i,11,25]);
+}
+
 $('div > [data-toggle="datepicker-visit"]').on('click',function(){
-    $(this).pickadate({
+    let $input = $(this).pickadate({
         format: 'ddd d mmmm yyyy',
         formatSubmit: 'dd/mm/yyyy',
         min: true,
         selectMonths: true,
-        selectYears: 2, //true
+        selectYears: 2, //true default to 10
         disable: [
-                // month start with 0 index (0 =>juanary)
-                //disabled Holidays and Thursdays
-                [currentYear,4,1],[currentYear,10,1],[currentYear,11,25],
                 2,
             ],
         onSet: function(context) {
             checkSelectedDay(context);
         }
     });
+    let picker = $input.pickadate('picker');
+    picker.set('disable',holidays)
 });
-
 
 $(document).on('click',function(){
     $('input[id$=_birthday]').pickadate({

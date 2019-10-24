@@ -25,6 +25,7 @@ services:
         tags: ['controller.service_arguments']
 
     App\Service\Cart\CartService:
+        arguments: ['@session']
         tags:
           - { name: session.cart }
     # add more service definitions when explicit configuration is needed

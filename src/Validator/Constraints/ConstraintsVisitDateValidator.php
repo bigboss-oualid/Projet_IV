@@ -34,5 +34,13 @@ class ConstraintsVisitDateValidator extends ConstraintValidator
 			              ->atPath('reservedFor')
 			              ->addViolation();
 		}
+		//Add Violation for holidays
+		foreach($constraint->holidays as $holiday) {
+			if ($protocol->getReservedFor()->format('d/m') === $holiday) {
+				$this->context->buildViolation($constraint->messageHolidaysSelected)
+				              ->atPath('reservedFor')
+				              ->addViolation();
+			}
+		}
 	}
 }

@@ -15,6 +15,9 @@ class ConstraintsVisitDate extends Constraint
      */
     public $message = "Today you can't choose a full day ticket";
 
+    public $holidays;
+    public $messageHolidaysSelected = "Sorry!! for the chosen day the museum will be closed, you can choose another day for your visit";
+
 
     //Add Constraint to Class Booking
 	public function getTargets()

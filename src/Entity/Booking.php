@@ -10,7 +10,7 @@ use App\Validator\Constraints as CustomAssert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BookingRepository")
- * @CustomAssert\ConstraintsVisitDate(groups={"order"})
+ * @CustomAssert\ConstraintsVisitDate(holidays={"01/05","01/11","25/12"},groups={"order"})
  */
 class Booking
 {
