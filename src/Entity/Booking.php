@@ -136,6 +136,10 @@ class Booking
         return $this->totalPrice;
     }
 
+	/**
+	 * Define price format ex: '2 479'
+	 * @return string
+	 */
     public function getFormattedPrice(): string
     {
     	return number_format($this->totalPrice, 0, '', ' ');

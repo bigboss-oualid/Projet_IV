@@ -31,7 +31,7 @@
                         <a href="{{ path('booking') }}" class="float-right btn btn-success btn-sm"><span class="d-md-inline-block mr-2 font-weight-bold">Ajouter Billets </span><i class="icon-cog-gold fas fa-cart-plus"></i></a>
                     </span>
                     <span class="col-sm-6 mt-2">
-                        <a href="{{ path('cleancart') }}" class="float-left btn btn-info btn-sm"><span class="d-md-inline-block mr-2 font-weight-bold">Vider Le panier</span><i class="icon-cog-gold fas fa-broom"></i></a>
+                        <a href="{{ path('cleancart') }}" class="ask-delete float-left btn btn-info btn-sm"><span class="d-md-inline-block mr-2 font-weight-bold">Vider Le panier</span><i class="icon-cog-gold fas fa-broom"></i></a>
                     </span>
                 </div>
 
@@ -62,10 +62,10 @@
                         <tfoot>
                             <tr>
                                 <td  colspan="6"><h4 class="text-right">La somme à payer :</h4></td>
-                                <td class="text-right font-weight-bolder"><h4>{{ cart['last_price'] }} <i class="fas fa-500px fa-euro-sign"></i></h4></td>
+                                <td class="text-right font-weight-bolder"><h4>{{ last_price|number_format(2,'.',' ') }} <i class="fas fa-500px fa-euro-sign"></i></h4></td>
                             </tr>
                         </tfoot>
-                        <tbody>{{ dump(cart['orders'])  }}
+                        <tbody>{{ dump(cart['orders']) }} {{ dump(cart) }}
                             {% for order in cart['orders'] %}
                                 {% set orderIndex = loop.index %}
                                 {% for visitor in order.visitors %}
@@ -88,23 +88,27 @@
                                             {% endif %}
                                         </td>
                                     {% endif %}
-                                        <td class="col-sm-4 text-center striped-cell">
+                                        <td class="align-middle col-sm-4 text-center striped-cell">
                                             <span>{{visitor.lastname ~' '~ visitor.firstname}}</span>
                                         </td>
-                                        <td class="text-center col-sm-1 striped-cell">
+                                        <td class="align-middle text-center col-sm-1 striped-cell">
                                             {{visitor.discount ? '<i class="icon-cog-success fas fa-check"></i>' : '<i class="icon-cog-danger fas fa-times"></i>'}}
                                         </td>
-                                        <td class="text-center col-sm-1 striped-cell">
-                                            {{visitor.ticketAmount }}
-                                            <i class="fas fa-sm fa-euro-sign"></i>
+                                        <td class="align-middle text-center col-sm-1 striped-cell">
+                                            {% if visitor.ticketAmount == 0 %}
+                                                <span class="badge badge-pill badge-success">GRATIS</span>
+                                            {% else %}
+                                                {{ visitor.ticketAmount }}
+                                                <i class="fas fa-sm fa-euro-sign"></i>
+                                            {% endif %}
                                         </td>
-                                        <td class="col-sm-1 striped-cell text-center">
+                                        <td class="align-middle col-sm-1 striped-cell text-center">
                                             <a href="{{ path('remove', { 'idOrder': orderIndex, 'idVisitor': loop.index }) }}" class="btn-outline-danger btn-sm">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </td>
                                         {% if loop.index == 1 %}
-                                        <td class="col-sm-2 text-right align-bottom font-weight-lighter" rowspan=" {{ order.visitorsNbr }}">
+                                        <td class="col-sm-2 text-right align-bottom font-weight-bloder text-info" rowspan=" {{ order.visitorsNbr }}">
                                             {{order.getFormattedPrice}}
                                             <i class="fas fa-sm fa-euro-sign"></i>
                                         </td>
@@ -128,6 +132,10 @@
     </section>
     <!--Section: Booking-->
     <script>
+
+        document.querySelector('.ask-delete').addEventListener('click', function (e) {
+            confirm('Are you sure, you want empty the basket ?');
+        });
         let toggledElt  = document.querySelector(".my-anima");
 
         function startAnimation() {

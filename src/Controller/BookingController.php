@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Form\OrderType;
+use App\Service\Cart\CalculatorTicketsPrice;
 use App\Service\Cart\CartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -86,22 +87,23 @@ class BookingController extends AbstractController
 	/**
 	 * @Route("booking/cart", name="cart")
 	 *
+	 * @param CalculatorTicketsPrice $calculatorTicketPrice
+	 *
 	 * @return Response
 	 */
-    public function cart(): Response
+    public function cart(CalculatorTicketsPrice $calculatorTicketPrice): Response
     {
 	    $cartInfo = $this->cartService->getCartInfo();
-
 	    if(empty($cartInfo))
-	    	return $this->render('pages/booking/cart.html.twig', [
+		    return $this->render('pages/booking/cart.html.twig', [
 			    'current_menu'  => 'Booking',
-			    'total_visitor_nbr'  => null,
-			    'orders'        => [],
 	         ]);
 
+	    $lastPrice = $calculatorTicketPrice->setPriceTicket($this->cartService);
 	    return $this->render('pages/booking/cart.html.twig', [
 		    'current_menu'  => 'Booking',
-		    'cart'          => $cartInfo
+		    'cart'          => $cartInfo,
+		    'last_price'=> $lastPrice,
 	    ]);
     }
 

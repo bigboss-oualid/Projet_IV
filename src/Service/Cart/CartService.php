@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class CartService
 {
 	protected $session;
+	/**
+	 * @var Booking []
+	 */
 	private $cart;
 
 	public function __construct(SessionInterface $session)
@@ -34,18 +37,15 @@ class CartService
 	public function getCartInfo() :array
 	{
 		if(empty($this->cart)) return [];
-		$lastPrice = 0;
 		$totalVisitorNbr = 0;
 		foreach($this->cart as $key => $booking){
 			$booking->setTotalPrice();
-			$lastPrice += $booking->getTotalPrice();
 			$totalVisitorNbr += count($booking->getVisitors());
 		}
 		$this->cart = array_values($this->cart);
 		$this->session->set('cart', $this->cart);
 		return [
 			'orders' => $this->cart,
-			'last_price'=> $lastPrice,
 			'total_visitor_nbr' => $totalVisitorNbr
 		];
 	}
@@ -89,12 +89,12 @@ class CartService
 
 		$order->getVisitors()->remove($idVisitor - 1);
 		if (!$order->getVisitors()->isEmpty()) {
-			$items = new ArrayCollection();
+			$newVisitorsList = new ArrayCollection();
 			//Reindex array of visitors
-			foreach ($order->getVisitors() as $item) {
-				$items->add($item);
+			foreach ($order->getVisitors() as $visitor) {
+				$newVisitorsList->add($visitor);
 			}
-			$order->addVisitors($items);
+			$order->addVisitors($newVisitorsList);
 			//reduce visitor number
 			$order->setVisitorsNbr($order->getVisitorsNbr()-1);
 		}
