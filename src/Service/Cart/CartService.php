@@ -39,7 +39,6 @@ class CartService
 		if(empty($this->cart)) return [];
 		$totalVisitorNbr = 0;
 		foreach($this->cart as $key => $booking){
-			$booking->setTotalPrice();
 			$totalVisitorNbr += count($booking->getVisitors());
 		}
 		$this->cart = array_values($this->cart);

@@ -72,6 +72,7 @@ class BookingController extends AbstractController
 	    $form->setData($this->cartService->getLastOrder());
 	    $form->handleRequest($request);
 	    if($form->isSubmitted() && $form->isValid()) {
+
 		    $this->cartService->refresh();
 		    return $this->redirectToRoute('cart');
 	    }

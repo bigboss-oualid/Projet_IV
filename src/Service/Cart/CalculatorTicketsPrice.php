@@ -14,18 +14,19 @@ class CalculatorTicketsPrice
 	 */
 	const TICKET_PRICE = [
 		'BABY'   => [
-			'AGE' => ['LESS_THAN' => 4 ]
-			, 'PRICE' => 0
+			'AGE' => 0,
+			'PRICE' => 0
 		],
 		'KID'    => [
-			'AGE' => ['LESS_THAN' => 12],
+			'AGE'  => 4,
 			'PRICE' => 8
 		],
 		'NORMAL' => [
-			'AGE' => ['LESS_THAN' => 60],
+			'AGE' => 12,
 			'PRICE' => 16
 		],
 		'SENIOR' => [
+			'AGE' => 60,
 			'PRICE' => 12
 		]
 	];
@@ -35,6 +36,8 @@ class CalculatorTicketsPrice
 	 * Calculate age and set ticket price in session for every visitor
 	 *
 	 * @param CartService $cartService
+	 *
+	 * @return int
 	 */
 	public function setPriceTicket(CartService $cartService)
 	{
@@ -51,9 +54,10 @@ class CalculatorTicketsPrice
 				$visitor->getBirthday();//DateTIME
 				$ageInDays = date_diff($visitor->getBirthday(), $visitedDate);
 				$ageInYears = $ageInDays->format("%R%a")/365;
-				$normalPrice = $this->ticketPrice($ageInYears, $visitor->hasDiscount());
-				$visitor->setTicketAmount($normalPrice);
+				$ticketPrice = $this->ticketPrice($ageInYears, $visitor->hasDiscount());
+				$visitor->setTicketAmount($ticketPrice);
 			}
+			$order->setTotalPrice();
 			$lastPrice += $order->getTotalPrice();
 		}
 		return $lastPrice;
@@ -69,21 +73,21 @@ class CalculatorTicketsPrice
 	private function ticketPrice(int $age, bool $hasDiscount): int
 	{
 		$discount = 0;
-		if($hasDiscount && $age > self::TICKET_PRICE['BABY']['AGE']['LESS_THAN'])
+		if($hasDiscount && $age >= self::TICKET_PRICE['NORMAL']['AGE'])
 			$discount = self::REDUCTION;
 
-		if($age < self::TICKET_PRICE['BABY']['AGE']['LESS_THAN'])
+		if($age < self::TICKET_PRICE['KID']['AGE'])
 			return self::TICKET_PRICE['BABY']['PRICE'] ;
 
-		if($age >= self::TICKET_PRICE['BABY']['AGE']['LESS_THAN']
-				&& $age < self::TICKET_PRICE['KID']['AGE']['LESS_THAN'])
-			return self::TICKET_PRICE['KID']['PRICE'] - $discount;
+		if($age >= self::TICKET_PRICE['KID']['AGE']
+				&& $age < self::TICKET_PRICE['NORMAL']['AGE'])
+			return self::TICKET_PRICE['KID']['PRICE'];
 
-		if($age >= self::TICKET_PRICE['KID']['AGE']['LESS_THAN']
-				&& $age < self::TICKET_PRICE['NORMAL']['AGE']['LESS_THAN'])
+		if($age >= self::TICKET_PRICE['NORMAL']['AGE']
+				&& $age < self::TICKET_PRICE['SENIOR']['AGE'])
 			return self::TICKET_PRICE['NORMAL']['PRICE'] - $discount;
 
-		if($age >= self::TICKET_PRICE['NORMAL']['AGE']['LESS_THAN'])
+		if($age >= self::TICKET_PRICE['SENIOR']['AGE'])
 			return self::TICKET_PRICE['SENIOR']['PRICE'] - $discount;
 	}
 }
