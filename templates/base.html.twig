@@ -11,6 +11,8 @@
         <!-- Get css from webpack-encore -->
         {{ encore_entry_link_tags('app') }}
         <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+        <!-- Get Stripe Service -->
+        <script src="https://js.stripe.com/v3/"></script>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>

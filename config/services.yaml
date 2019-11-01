@@ -5,7 +5,11 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
   locale: 'fr'
-
+  stripe_public_key: pk_test_6O4FASeWBRuj9DMdQB757fKB00Jp7KiBsi
+  stripe_secret_key: sk_test_SSVJrBmrsC7vNvhVwY7f6fu4003qkE3ccz
+  payment:
+          currency: EUR
+          decimal: true
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -28,5 +32,10 @@ services:
         arguments: ['@session']
         tags:
           - { name: session.cart }
+    cart.service: '@App\Service\Cart\CartService'
+
+    App\Service\Cart\StripeClient:
+        arguments: ['%stripe_secret_key%', '%payment%', '@doctrine.orm.entity_manager', '@cart.service', '@App\Repository\PaymentCardRepository']
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
