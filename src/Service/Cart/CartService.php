@@ -14,10 +14,16 @@ class CartService
 	 */
 	private $cart;
 
+	/**
+	 * @var int
+	 */
+	private $lastPrice;
+
 	public function __construct(SessionInterface $session)
 	{
 		$this->session = $session;
 		$this->cart = $this->session->get('cart', []);
+		$this->lastPrice = $this->session->get('lastPrice', []);
 	}
 
 	/**
@@ -97,6 +103,9 @@ class CartService
 			//reduce visitor number
 			$order->setVisitorsNbr($order->getVisitorsNbr()-1);
 		}
+		else {
+			$this->deleteOrder($idOrder);
+		}
 		$this->session->set('cart', $this->cart);
 		return[
 			'name' => $name,
@@ -128,4 +137,18 @@ class CartService
 	{
 		return $this->cart;
 	}
+
+	/**
+	 * @return int
+	 */
+	public function getLastPrice(): int
+	{
+		return $this->lastPrice;
+	}
+
+	public function setLastPrice(int $price)
+	{
+		$this->session->set('lastPrice', $price);
+	}
+
 }

@@ -9,6 +9,7 @@ class CalculatorTicketsPrice
 	 * Reduction from ticket price
 	 */
 	const REDUCTION = 10;
+
 	/**
 	 * ticket [type=>[Age=>['less_than' = NULL],price]
 	 */
@@ -39,7 +40,7 @@ class CalculatorTicketsPrice
 	 *
 	 * @return int
 	 */
-	public function setPriceTicket(CartService $cartService)
+	public function setPriceTickets(CartService $cartService)
 	{
 		$cartInfo = $cartService->getCartInfo();
 		$lastPrice = 0;
@@ -60,6 +61,8 @@ class CalculatorTicketsPrice
 			$order->setTotalPrice();
 			$lastPrice += $order->getTotalPrice();
 		}
+
+		$cartService->setLastPrice($lastPrice);
 		return $lastPrice;
 	}
 
