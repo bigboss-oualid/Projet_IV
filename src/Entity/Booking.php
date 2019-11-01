@@ -16,9 +16,9 @@ class Booking
 {
 
 	const FULL_DAY_TICKET = [
-        'Day'      => true,
-        'Half day' => false,
-	];
+                          'Day'      => true,
+                          'Half day' => false,
+                  	];
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -59,15 +59,16 @@ class Booking
     private $totalPrice;
 
 	/**
-	 * @var Visitor|null
-	 */
-    private $visitor;
-
-	/**
 	 * @ORM\OneToMany(targetEntity="App\Entity\Visitor", mappedBy="booking", orphanRemoval=true, cascade={"persist"})
 	 * @Assert\Valid(groups={"visitor"})
 	 */
 	private $visitors;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\PaymentCard", inversedBy="bookings")
+     * @ORM\JoinColumn(name="payment_card_id", referencedColumnName="id", nullable=false)
+     */
+    private $paymentCard;
 
 	/**
 	 * Booking constructor.
@@ -75,18 +76,18 @@ class Booking
 	public function __construct()
     {
     	$this->setCreatedAt(new \DateTime());
-        $this->visitors = new ArrayCollection();
+    	$this->visitors = new ArrayCollection();
     }
 
 	public function getId(): ?int
-	{
-	     return $this->id;
-	}
+    {
+        return $this->id;
+    }
 
 	public function getVisitorsNbr()
-	{
-		return $this->visitorsNbr;
-	}
+    {
+    	return $this->visitorsNbr;
+    }
 
 
 	public function setVisitorsNbr($visitorsNbr)
@@ -161,11 +162,12 @@ class Booking
 	 */
 	public function getVisitors(): Collection
 	{
+
 		return $this->visitors;
 	}
 
 	/**
-	 * @param  Collection|Visitor[]
+	 * @param ArrayCollection $visitors
 	 *
 	 * @return Collection|Visitor[]
 	 */
@@ -175,32 +177,13 @@ class Booking
 		return $this->visitors;
 	}
 
-	/**
-	 * @return Visitor|null
-	 */
-	public function getVisitor(): ?Visitor
-	{
-		return $this->visitor;
-	}
-
-	/**
-	 * @param Visitor|null $visitor
-	 *
-	 * @return Booking
-	 */
-	public function setVisitor(?Visitor $visitor): self
-	{
-		$this->visitor = $visitor;
-		return $this;
-	}
 
 	public function addVisitor(Visitor $visitor): self
     {
         if (!$this->visitors->contains($visitor)) {
-            $this->visitors[] = $visitor;
+             $this->visitors[] = $visitor;
             $visitor->setBooking($this);
         }
-
         return $this;
     }
 
@@ -213,6 +196,18 @@ class Booking
                 $visitor->setBooking(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPaymentCard(): ?PaymentCard
+    {
+        return $this->paymentCard;
+    }
+
+    public function setPaymentCard(?PaymentCard $paymentCard): self
+    {
+        $this->paymentCard = $paymentCard;
 
         return $this;
     }

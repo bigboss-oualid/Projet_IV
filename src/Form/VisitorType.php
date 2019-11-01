@@ -16,7 +16,7 @@ class VisitorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-	        ->add('lastname', TextType::class, ['required' => false])
+	        ->add('lastname', TextType::class)
 	        ->add('firstname', TextType::class)
 	        ->add('country', CountryType::class, [
 		        //'placeholder' => 'Choose your Country',

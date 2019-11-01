@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-
 use App\Form\OrderType;
 use App\Service\Cart\CalculatorTicketsPrice;
 use App\Service\Cart\CartService;
@@ -70,9 +69,9 @@ class BookingController extends AbstractController
 	         ->remove('reservedFor');
 
 	    $form->setData($this->cartService->getLastOrder());
+
 	    $form->handleRequest($request);
 	    if($form->isSubmitted() && $form->isValid()) {
-
 		    $this->cartService->refresh();
 		    return $this->redirectToRoute('cart');
 	    }
@@ -100,7 +99,10 @@ class BookingController extends AbstractController
 			    'current_menu'  => 'Booking',
 	         ]);
 
-	    $lastPrice = $calculatorTicketPrice->setPriceTicket($this->cartService);
+	    $lastPrice = $calculatorTicketPrice->setPriceTickets($this->cartService);
+
+	    dump($this->cartService);
+
 	    return $this->render('pages/booking/cart.html.twig', [
 		    'current_menu'  => 'Booking',
 		    'cart'          => $cartInfo,
