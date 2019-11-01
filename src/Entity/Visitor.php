@@ -75,11 +75,11 @@ class Visitor
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Booking", inversedBy="visitors")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="booking_id", referencedColumnName="id", nullable=false)
      */
     private $booking;
 
-    public function getId(): ?int
+	public function getId(): ?int
     {
         return $this->id;
     }
@@ -175,7 +175,8 @@ class Visitor
 
     public function setBooking(?Booking $booking): self
     {
-        $this->booking = $booking;
+	    $booking->addVisitor($this);
+	    $this->booking = $booking;
 
         return $this;
     }
