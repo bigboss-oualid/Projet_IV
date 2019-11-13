@@ -42,7 +42,9 @@
         </div>
     </section>
     <!--Section: Payment-->
-        <script type="text/javascript">
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
         let form = document.getElementById('{{ form.vars.id }}');
         let errors = document.getElementById('card-errors');
 
@@ -75,6 +77,5 @@
             });
         });
     </script>
-
 {% endblock %}
 

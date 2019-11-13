@@ -15,7 +15,6 @@ class StripeClient
 	private $newCustomer;
 	private $config;
 	private $em;
-	private $secretKey;
 	private $cartService;
 	private $paymentCardRepository;
 
@@ -33,7 +32,6 @@ class StripeClient
 		Stripe::setApiKey($secretKey);
 		$this->config = $config;
 		$this->em = $em;
-		$this->secretKey = $secretKey;
 		$this->cartService = $cartService;
 		$this->paymentCardRepository = $repository;
 	}
@@ -90,11 +88,11 @@ class StripeClient
 	private function chargeClientId(array $data)
 	{
 			return Charge::create([
-				                         'amount' => $this->config['decimal'] ? $this->cartService->getLastPrice() * 100 : $this->cartService->getLastPrice(),
-				                         'currency' => $this->config['currency'],
-				                         'description' => 'Buchung Erfolgreich',
-				                         'customer' => $data['customerId'],
-				                         'receipt_email' => $data['email'],
+				'amount' => $this->config['decimal'] ? $this->cartService->getLastPrice() * 100 : $this->cartService->getLastPrice(),
+				'currency' => $this->config['currency'],
+                'description' => 'Buchung Erfolgreich',
+				'customer' => $data['customerId'],
+				'receipt_email' => $data['email'],
 			                         ]
 			);
 	}
@@ -108,7 +106,7 @@ class StripeClient
 	{
 		foreach($this->cartService->getCart() as $booking){
 			foreach($booking->getVisitors() as $visitor){
-				$visitor->setTicketCode(bin2hex(random_bytes(15)) . $visitor->getId());
+				$visitor->setTicketCode(bin2hex(random_bytes(10)) . $visitor->getId());
 				$visitor->setBooking($booking);
 			}
 			$paymentCard->addBooking($booking);
@@ -117,7 +115,7 @@ class StripeClient
 				$this->em->flush();
 			}
 		}
-		if(!$this->newCustomer){
+		if($this->newCustomer){
 			$this->em->persist($paymentCard);
 			$this->em->flush();
 		}

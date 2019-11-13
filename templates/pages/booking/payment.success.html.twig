@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Panier' %}
+
+{% block header %}
+    <header class="na-buy">
+        <div class="container">
+            {% if receipt_email is defined %}
+                <h1 class="col-sm-12 text-center">Le montant de <span class="text-warning font-weight-bolder"> {{ amount }} Euro </span> sera débité de votre carte de crédit. <div>Les tickets vous seront envoyés sur l'adresse  email : <span class="text-warning font-weight-bolder">{{ receipt_email }}</span></div></h1>
+            {% endif %}
+        </div>
+    </header>
+{% endblock %}
+{% block body %}
+    <!--Section: Booking-->
+    <!--Section: Booking-->
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}
+

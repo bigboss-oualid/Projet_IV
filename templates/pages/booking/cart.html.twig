@@ -5,7 +5,7 @@
 {% block header %}
     <header class="na-buy">
         <div class="container">
-            <h1 class="col-sm-12 text-center">Votre panier {% if cart is defined and cart['total_visitor_nbr'] is not empty %} {{ ' contient '}} <span class="text-warning font-weight-bolder">{{ cart['total_visitor_nbr']}} </span> {{ ' billet(s)'}} {% else %} {{ ' est Vide' }}   {% endif %} </h1>
+            <h1 class="col-sm-12 text-center">Votre panier {% if cart is defined and cart['total_visitor_nbr'] is not empty %} {{ ' contient '}} <span class="text-warning font-weight-bolder">{{ cart['total_visitor_nbr']}} </span> {{ ' billet(s)'}} {% else %} {{ ' est Vide' }} {% endif %} </h1>
         </div>
     </header>
 {% endblock %}
@@ -124,7 +124,6 @@
                         <a href="{{ path('booking') }}" class="btn btn-success btn-sm"><span class="d-md-inline-block mr-2 font-weight-bold">Ajouter Billets </span><i class="icon-cog-gold fas fa-cart-plus"></i></a></div>
                     </span>
                 </div>
-                    <p>Votre Panier est vide</p>
                 {% endif %}
                 </div>
             </div>
@@ -132,8 +131,10 @@
 
     </section>
     <!--Section: Booking-->
-    <script>
+{% endblock %}
 
+{% block javascripts %}
+    <script>
         document.querySelector('.ask-delete').addEventListener('click', function (e) {
             confirm('Are you sure, you want empty the basket ?');
         });
@@ -149,6 +150,5 @@
             tdElt.classList.add('color-Bottom');
         }
     </script>
-
 {% endblock %}
 

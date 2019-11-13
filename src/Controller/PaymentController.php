@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class PaymentController extends AbstractController
 {
 	/**
-	 * @Route("/payment", name="payment")
+	 * @Route("/booking/payment", name="payment")
 	 * @param Request      $request
 	 *
 	 * @param StripeClient $stripeClient
@@ -35,15 +35,19 @@ class PaymentController extends AbstractController
 			if ($form->isSubmitted() && $form->isValid()) {
 				try {
 					$charge = $stripeClient->chargeClient($form->getData());
-					$this->redirectToRoute('cart');
+
+					return $this->redirectToRoute('success', [
+						'receipt_email' => $charge->receipt_email,
+						'amount' => ($charge->amount/100),
+					]);
 				} catch (ApiErrorException $e) {
 					$this->addFlash('warning', sprintf('Unable to take payment, %s', $e instanceof ApiErrorException ? lcfirst($e->getMessage()) : 'please try again.'));
-					$this->redirectToRoute('cart');
 				}
 
 			}
 		}
 		return $this->render('pages/booking/payment.html.twig', [
+			'current_menu'  => 'Booking',
 			'form' => $form->createView(),
 			'stripe_public_key' => $this->getParameter('stripe_public_key'),
 		]);
