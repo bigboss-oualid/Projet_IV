@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class TicketsGeneration extends AbstractController
+class TicketsGenerationController extends AbstractController
 {
 	/**
 	 * @Route("/booking/payment/success/{receipt_email}/{amount}", name="success", requirements={"receipt_email"="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$", "amount"="\d+"})
@@ -27,19 +27,19 @@ class TicketsGeneration extends AbstractController
 		$path = $this->getParameter('kernel.project_dir') . '/public/images/louvre-log-origo.png';
 		$type = pathinfo($path, PATHINFO_EXTENSION);
 		$data = file_get_contents($path);
-		$base = 'data:image/'.$type.';base64,'.base64_encode($data);
+		$baseLogo = 'data:image/'.$type.';base64,'.base64_encode($data);
+
+		$cart = $cartService->getCart();
 		$html = $this->renderView('pdf/tickets.html.twig', [
-			'orders' => $cartService->getCart(),
-			'image' => $base
+			'orders' => $cart,
+			'logo' => $baseLogo
 		]);
 
-		$ticketsAsPdf->generatePDF($html);
+		$ticketsAsPdf->generatePDF($html, 'tickets', $cart[0]->getPaymentCard()->getId());
 
-		//show tickets
-		return $this->render('pdf/tickets.html.twig', [
-			'orders' => $cartService->getCart(),
-			'image' => $base
-		]);
+		//show tickets in browser
+		//return $html;
+
 		// render to success page
 		return $this->render('pages/booking/payment.success.html.twig', [
 			'current_menu'  => 'Booking',

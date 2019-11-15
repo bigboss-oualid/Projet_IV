@@ -1,7 +1,9 @@
 <?php
 namespace App\Controller;
 
+use App\Service\Cart\CartService;
 use App\Service\Cart\StripeClient;
+use App\Service\Pdf;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -22,10 +24,14 @@ class PaymentController extends AbstractController
 	 *
 	 * @param StripeClient $stripeClient
 	 *
+	 * @param CartService  $cartService
+	 * @param Pdf          $ticketsAsPdf
+	 *
 	 * @return Response
 	 * @throws \Doctrine\ORM\NonUniqueResultException
+	 * @throws \Pdfcrowd\Error
 	 */
-	public function payment(Request $request, StripeClient $stripeClient): Response
+	public function payment(Request $request, StripeClient $stripeClient, CartService $cartService, Pdf $ticketsAsPdf): Response
 	{
 		$form = $this->paymentForm();
 
@@ -35,10 +41,25 @@ class PaymentController extends AbstractController
 			if ($form->isSubmitted() && $form->isValid()) {
 				try {
 					$charge = $stripeClient->chargeClient($form->getData());
+					$lastPrice = $charge->amount/100;
+					$id =  $cartService->getCart()[0]->getPaymentCard()->getId();
+
+					$path = $this->getParameter('kernel.project_dir') . '/public/images/louvre-log-origo.png';
+					$type = pathinfo($path, PATHINFO_EXTENSION);
+					$data = file_get_contents($path);
+					$baseLogo = 'data:image/'.$type.';base64,'.base64_encode($data);
+
+					$html = $this->renderView('pdf/invoice.html.twig', [
+						'orders' => $cartService->getCart(),
+						'last_price' => $lastPrice,
+						'id_invoice' => $id,
+						'logo' => $baseLogo
+					]);
+					$ticketsAsPdf->generatePDF($html, 'invoice', $id);
 
 					return $this->redirectToRoute('success', [
 						'receipt_email' => $charge->receipt_email,
-						'amount' => ($charge->amount/100),
+						'amount' => $lastPrice,
 					]);
 				} catch (ApiErrorException $e) {
 					$this->addFlash('warning', sprintf('Unable to take payment, %s', $e instanceof ApiErrorException ? lcfirst($e->getMessage()) : 'please try again.'));

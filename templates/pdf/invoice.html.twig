@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<div class="ml-5 mb-5 row">
+    <div class="col-4">
+        <div>Musée de Louvre</div>
+        <div>75058 Paris</div>
+        <div> CEDEX 01,France</div>
+        <div>Tel: +33 (0)1 40 20 50 50</div>
+        <div>Email: info@louvre.fr</div>
+    </div>
+    <div class="col-4">
+        <img src="{{ logo }}" alt="">
+    </div>
+    <div class="col-4">
+        <div>A Monsieur XXX</div>
+        <div>Adresse</div>
+        <div>Rue</div>
+        <div>Email: {{ orders[0].paymentCard.email }} </div>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col-12">
+        {% set createdAt = orders[0].createdAt %}
+        <p class="text-right smaller font-weight-bold font-italic mr-5"> Le {{ createdAt|date('d F Y') }}</p>
+    </div>
+    <div class="col-12">
+        <p class="text-center font-weight-bolder"> Avoir N° {{ createdAt|date('Y-') ~ id_invoice }}</p>
+    </div>
+</div>
+</div>
+    <table class="table table-striped-default">
+        <thead class="thead-dark title-cell"><!-- En-tête du tableau -->
+        <tr>
+            <th class="col-xs-1 text-right title-cell">#</th>
+            <th class="col-xs-3 text-center title-cell">Infos</th>
+            <th class="col-xs-4 text-center title-cell">Visiteurs</th>
+            <th class="col-xs-1 text-center title-cell">Réduction</th>
+            <th class="col-xs-1 text-center title-cell">Prix</th>
+            <th class="col-xs-2 text-center title-cell">Total</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <td class="text-right" colspan="5"><h4>La somme à payer :</h4></td>
+            <td class="font-weight-bolder text-center"><h4>{{ last_price|number_format(2,'.',' ') }} €</h4></td>
+        </tr>
+        </tfoot>
+        <tbody>
+        {% for order in orders %}
+            {% set orderIndex = loop.index %}
+            {% for visitor in order.visitors %}
+                <tr>
+                    {% if loop.index == 1 %}
+                        <td rowspan=" {{ order.visitorsNbr }} "  class="col-xs-1 align-middle icon-cog-info font-weight-bold text-right">
+                            <span>{{ orderIndex }}</span>
+                        </td>
+                        <td rowspan=" {{ order.visitorsNbr }} "  class="col-xs-3 align-middle text-center">
+                            <span class="smaller">{{ order.reservedFor|date('d/m/Y') }}</span><br/>
+                            {% if order.fullDay == false  %}
+                                <span>Toute la Journée</span>
+                            {% else %}
+                                <span>à partir de 14H</span>
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                    <td class="align-middle col-xs-4 text-center striped-cell">
+                        <span>{{visitor.lastname ~' '~ visitor.firstname}}</span>
+                    </td>
+                    <td class="align-middle text-center col-xs-1 striped-cell">
+                        {{visitor.discount ? '<i class="icon-cog-success fas fa-check"></i>' : '<i class="icon-cog-danger fas fa-times"></i>'}}
+                    </td>
+                    <td class="align-middle text-center col-xs-1 striped-cell">
+                        {% if visitor.ticketAmount == 0 %}
+                            <span class="badge badge-pill badge-success">GRATIS</span>
+                        {% else %}
+                            {{ visitor.ticketAmount }} €
+                        {% endif %}
+                    </td>
+                    {% if loop.index == 1 %}
+                        <td class="col-xs-2 text-center align-bottom font-weight-bloder text-info" rowspan=" {{ order.visitorsNbr }}">
+                            {{order.getFormattedPrice}} €
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <!-- Footer -->
+    <footer>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </footer>
+</body>
