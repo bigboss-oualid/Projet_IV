@@ -32,4 +32,8 @@ npm-debug.log
 /src/Migrations/
 ###< Database migrations ###
 
+###> PDF ###
+/public/pdf/
+###< PDF ###
+
 /ngrok.exe

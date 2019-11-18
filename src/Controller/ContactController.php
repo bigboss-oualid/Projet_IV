@@ -5,7 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Form\ContactType;
-use App\Notification\ContactNotification;
+use App\Notification\EmailNotification;
 use App\Service\Cart\CartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,22 +17,22 @@ class ContactController extends AbstractController
 	/**
 	 * @Route("/contact", name="contact")
 	 *
-	 * @param Request             $request
-	 * @param ContactNotification $notification
-	 * @param CartService         $cartService
+	 * @param Request           $request
+	 * @param EmailNotification $notification
+	 * @param CartService       $cartService
 	 *
 	 * @return Response
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
 	 */
-	public function contact(Request $request, ContactNotification $notification, CartService $cartService): Response
+	public function contact(Request $request, EmailNotification $notification, CartService $cartService): Response
 	{
 		$contact = new Contact();
 		$form = $this->createForm(ContactType::class, $contact);
 		$form->handleRequest($request);
 		if($form->isSubmitted() && $form->isValid()){
-			$notification->notify($contact);
+			$notification->notifyContact($contact);
 			$this->addFlash('success', 'Votre email a bien été envoyé');
 			return $this->redirectToRoute('contact');
 

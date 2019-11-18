@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Notification\EmailNotification;
 use App\Service\Cart\CartService;
 use App\Service\Pdf;
 use Pdfcrowd\Error;
@@ -13,16 +14,20 @@ class TicketsGenerationController extends AbstractController
 {
 	/**
 	 * @Route("/booking/payment/success/{receipt_email}/{amount}", name="success", requirements={"receipt_email"="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$", "amount"="\d+"})
-	 * @param Request     $request
+	 * @param Request           $request
 	 *
-	 * @param Pdf         $ticketsAsPdf $ticketsAsPdf
+	 * @param EmailNotification $notification
+	 * @param Pdf               $ticketsAsPdf $ticketsAsPdf
 	 *
-	 * @param CartService $cartService
+	 * @param CartService       $cartService
 	 *
 	 * @return Response
 	 * @throws Error
+	 * @throws \Twig\Error\LoaderError
+	 * @throws \Twig\Error\RuntimeError
+	 * @throws \Twig\Error\SyntaxError
 	 */
-	public function generateTickets(Request $request, Pdf $ticketsAsPdf, CartService $cartService): Response
+	public function generateTickets(Request $request, EmailNotification $notification, Pdf $ticketsAsPdf, CartService $cartService): Response
 	{
 		$path = $this->getParameter('kernel.project_dir') . '/public/images/louvre-log-origo.png';
 		$type = pathinfo($path, PATHINFO_EXTENSION);
@@ -30,12 +35,18 @@ class TicketsGenerationController extends AbstractController
 		$baseLogo = 'data:image/'.$type.';base64,'.base64_encode($data);
 
 		$cart = $cartService->getCart();
+		$paymentCardId = $cart[0]->getPaymentCard()->getId();
+		$receiptEmail = $request->get('receipt_email');
+
 		$html = $this->renderView('pdf/tickets.html.twig', [
 			'orders' => $cart,
 			'logo' => $baseLogo
 		]);
 
-		$ticketsAsPdf->generatePDF($html, 'tickets', $cart[0]->getPaymentCard()->getId());
+		$ticketsAsPdf->generatePDF($html, 'tickets', $paymentCardId);
+
+		$notification->notifyClient($paymentCardId, $receiptEmail);
+		$cartService->clean();
 
 		//show tickets in browser
 		//return $html;
@@ -43,7 +54,7 @@ class TicketsGenerationController extends AbstractController
 		// render to success page
 		return $this->render('pages/booking/payment.success.html.twig', [
 			'current_menu'  => 'Booking',
-			'receipt_email' => $request->get('receipt_email'),
+			'receipt_email' => $receiptEmail,
 			'amount' => $request->get('amount')
 		]);
 	}

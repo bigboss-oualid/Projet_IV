@@ -42,6 +42,8 @@ services:
         arguments: ['%stripe_secret_key%', '%payment%', '@doctrine.orm.entity_manager', '@cart.service', '@App\Repository\PaymentCardRepository']
     App\Service\Pdf:
             arguments: ['%kernel.project_dir%','%user_name%','%pdf_secret_key%']
+    App\Notification\EmailNotification:
+                arguments: ['@swiftmailer.mailer.default','@twig','%kernel.project_dir%']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -115,7 +115,7 @@ class CartService
 
 	public function clean()
 	{
-		$this->session->remove('cart');
+		$this->session->clear();
 	}
 
 	/**
